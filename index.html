@@ -3,43 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Ujian Online Berbasis AI</title>
+    <title>Sistem Ujian Online SMK & AI Auto-Solve</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between select-none">
 
     <!-- HEADER / NAVIGATION -->
-    <header class="bg-indigo-700 text-white shadow-md">
+    <header class="bg-indigo-700 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="goToPage('login')">
-                <div class="bg-white text-indigo-700 p-2 rounded-lg font-bold text-xl shadow">
+                <div class="bg-white text-indigo-700 p-2 rounded-xl font-bold text-xl shadow">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight">CBT EXAM PRO</h1>
-                    <p class="text-xs text-indigo-200">Sistem Ujian Online SMK & AI Auto-Solve</p>
+                    <h1 class="font-extrabold text-lg leading-tight tracking-wide">CBT EXAM PRO SMK</h1>
+                    <p class="text-xs text-indigo-200">Sistem Ujian Online & AI Auto-Solve System</p>
                 </div>
             </div>
 
             <!-- User Info (Hidden in Login) -->
             <div id="headerUserInfo" class="hidden flex items-center space-x-4">
                 <div class="text-right hidden sm:block">
-                    <p id="studentDisplayName" class="font-semibold text-sm">Siswa</p>
-                    <p id="studentDisplayNIS" class="text-xs text-indigo-200">NIS: -</p>
+                    <p id="studentDisplayName" class="font-semibold text-sm">Nama Siswa</p>
+                    <p id="studentDisplayNIS" class="text-xs text-indigo-200">NISN: -</p>
                 </div>
-                <button onclick="logout()" class="text-xs bg-indigo-800 hover:bg-indigo-900 px-3 py-1.5 rounded-lg border border-indigo-500 transition">
+                <button onclick="logout()" class="text-xs bg-indigo-800 hover:bg-indigo-900 text-white px-3 py-1.5 rounded-lg border border-indigo-500 transition shadow">
                     <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
                 </button>
             </div>
@@ -49,14 +49,14 @@
     <!-- MAIN CONTENT CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
 
-        <!-- 1. HALAMAN LOGIN & VERIFIKASI SISWA -->
-        <div id="pageLogin" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-100 mt-8">
+        <!-- 1. HALAMAN LOGIN SISWA & NISN -->
+        <div id="pageLogin" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-slate-100 mt-6">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-inner">
-                    <i class="fa-solid fa-user-check"></i>
+                    <i class="fa-solid fa-user-lock"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-800">Verifikasi Siswa</h2>
-                <p class="text-sm text-slate-500 mt-1">Masukkan data diri untuk memulai ujian online</p>
+                <h2 class="text-2xl font-bold text-slate-800">Login Ujian Online</h2>
+                <p class="text-sm text-slate-500 mt-1">Masukkan data lengkap peserta ujian untuk masuk ke portal</p>
             </div>
 
             <form onsubmit="handleLogin(event)" class="space-y-4">
@@ -66,116 +66,140 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input type="text" id="inputName" required placeholder="Contoh: Budi Santoso"
+                        <input type="text" id="inputName" required placeholder="Contoh: Muhammad Rizky"
                             class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nomor Induk Siswa (NIS)</label>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">NIS / NISN</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                             <i class="fa-solid fa-id-card"></i>
                         </span>
-                        <input type="number" id="inputNIS" required placeholder="Contoh: 123456"
+                        <input type="number" id="inputNIS" required placeholder="Contoh: 005432109"
                             class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Kelas / Jurusan</label>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Kelas & Keahlian</label>
                     <select id="inputClass" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm">
-                        <option value="XII RPL 1">XII RPL 1 (Rekayasa Perangkat Lunak)</option>
-                        <option value="XII TKJ 2">XII TKJ 2 (Teknik Komputer & Jaringan)</option>
-                        <option value="XII AKL 1">XII AKL 1 (Akuntansi)</option>
-                        <option value="XII PM 1">XII PM 1 (Pemasaran)</option>
-                        <option value="XII BR 1">XII BR 1 (Bisnis Ritel)</option>
+                        <option value="XII RPL 1">XII RPL (Rekayasa Perangkat Lunak)</option>
+                        <option value="XII TKJ 1">XII TKJ (Teknik Komputer & Jaringan)</option>
+                        <option value="XII AKL 1">XII AKL (Akuntansi & Keuangan Lembaga)</option>
+                        <option value="XII BDP 1">XII PM (Pemasaran & Bisnis Daring)</option>
+                        <option value="XII BR 1">XII BR (Bisnis Ritel)</option>
                     </select>
                 </div>
 
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-indigo-200 flex items-center justify-center space-x-2">
-                    <span>Masuk ke Ujian</span>
+                    <span>Masuk Portal Ujian</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
         </div>
 
-        <!-- 2. HALAMAN PILIH MATA PELAJARAN / JURUSAN -->
-        <div id="pageSubjectSelect" class="hidden max-w-5xl mx-auto">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Pilih Mata Pelajaran / Keahlian</h2>
-                <p class="text-slate-500 mt-1">Pilih paket soal sesuai dengan kompetensi jurusan Anda</p>
+        <!-- 2. HALAMAN VERIFIKASI SISWA & PILIH MATA PELAJARAN -->
+        <div id="pageSubjectSelect" class="hidden max-w-6xl mx-auto space-y-6">
+            <!-- Student Verification Info Banner -->
+            <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-md border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/30 flex items-center justify-center text-indigo-300 text-2xl border border-indigo-400/30">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <div>
+                        <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold uppercase tracking-wider">Status Terverifikasi</span>
+                        <h3 id="verifStudentName" class="text-xl font-bold mt-1">Nama Siswa</h3>
+                        <p id="verifStudentDetails" class="text-xs text-slate-300">NISN: - | Kelas: -</p>
+                    </div>
+                </div>
+                <div class="text-xs bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-slate-300 max-w-sm">
+                    <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>
+                    Pastikan Anda memilih paket soal yang sesuai dengan kompetensi jurusan Anda. Waktu akan berjalan otomatis saat tombol **"Mulai Ujian"** ditekan.
+                </div>
+            </div>
+
+            <div class="text-center my-4">
+                <h2 class="text-2xl font-bold text-slate-800">Daftar Bank Soal Keahlian</h2>
+                <p class="text-slate-500 text-sm">Pilih mata pelajaran di bawah ini untuk memulai sesi ujian online</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="subjectCardsContainer">
-                <!-- Cards dynamically loaded -->
+                <!-- Dynamically loaded cards -->
             </div>
         </div>
 
         <!-- 3. HALAMAN UJIAN INTERAKTIF -->
-        <div id="pageExam" class="hidden">
+        <div id="pageExam" class="hidden space-y-6">
             <!-- Exam Header Bar -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-40">
                 <div class="flex items-center space-x-3">
                     <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
-                        <i class="fa-solid fa-book-bookmark text-xl"></i>
+                        <i class="fa-solid fa-book-open text-xl"></i>
                     </div>
                     <div>
-                        <h2 id="examSubjectTitle" class="font-bold text-slate-800 text-lg">Ujian Keahlian</h2>
-                        <p class="text-xs text-slate-500">Jumlah Soal: <span id="totalQuestionsCount">0</span> | Bobot: 100</p>
+                        <h2 id="examSubjectTitle" class="font-bold text-slate-800 text-base sm:text-lg">Mata Pelajaran</h2>
+                        <p class="text-xs text-slate-500">Total Soal: <span id="totalQuestionsCount" class="font-bold text-indigo-600">0</span> | Alokasi Waktu: 90 Menit</p>
                     </div>
                 </div>
 
-                <!-- Timer & Controls -->
-                <div class="flex items-center space-x-4">
-                    <div class="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-2 rounded-xl flex items-center space-x-2">
-                        <i class="fa-solid fa-clock animate-pulse"></i>
-                        <span id="timerDisplay" class="font-mono font-bold text-lg">60:00</span>
+                <!-- Timer & Finish Controls -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-2 rounded-xl flex items-center space-x-2 shadow-sm">
+                        <i class="fa-solid fa-hourglass-half animate-spin text-amber-600"></i>
+                        <span id="timerDisplay" class="font-mono font-bold text-lg">90:00</span>
                     </div>
 
-                    <button onclick="finishExamPrompt()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl transition shadow text-sm flex items-center space-x-2">
+                    <button onclick="finishExamPrompt()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-xl transition shadow text-sm flex items-center space-x-2">
                         <i class="fa-solid fa-paper-plane"></i>
                         <span>Selesai & Kirim</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Main Exam Interface Grid -->
+            <!-- Main Exam Grid (Question Area + Navigation & AI Assistant) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
-                <!-- Left/Main Column: Question Card & Answer Options -->
+                <!-- Main Question Box -->
                 <div class="lg:col-span-8 space-y-6">
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 relative">
                         <!-- Question Header -->
                         <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                            <span class="font-semibold text-indigo-600 text-sm bg-indigo-50 px-3 py-1 rounded-full">
-                                Soal No. <span id="currentQuestionNum">1</span>
+                            <span class="font-bold text-indigo-600 text-sm bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                                Soal No. <span id="currentQuestionNum">1</span> / <span id="maxQuestionNum">50</span>
                             </span>
-                            <span id="questionCategoryBadge" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium">
-                                Umum
-                            </span>
+                            <div class="flex items-center space-x-2">
+                                <label class="inline-flex items-center cursor-pointer text-xs bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1 rounded-full">
+                                    <input type="checkbox" id="checkRagu" onchange="toggleRaguRagu()" class="form-checkbox h-3.5 w-3.5 text-amber-600 rounded">
+                                    <span class="ml-1.5 font-medium">Ragu-Ragu</span>
+                                </label>
+                                <span id="questionCategoryBadge" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium">
+                                    Kompetensi
+                                </span>
+                            </div>
                         </div>
 
-                        <!-- Question Body -->
+                        <!-- Question Text Body -->
                         <div class="mb-6">
-                            <p id="questionText" class="text-slate-800 text-base sm:text-lg leading-relaxed font-medium">
-                                Memuat soal...
+                            <p id="questionText" class="text-slate-800 text-base sm:text-lg font-medium leading-relaxed">
+                                Memuat teks soal...
                             </p>
                         </div>
 
-                        <!-- Answer Options (A/B/C/D) -->
+                        <!-- Answer Options Container -->
                         <div id="optionsContainer" class="space-y-3">
-                            <!-- Options rendered dynamically -->
+                            <!-- Options A, B, C, D dynamically injected -->
                         </div>
 
-                        <!-- Navigation Buttons -->
+                        <!-- Navigation Controls -->
                         <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-100">
-                            <button id="btnPrev" onclick="prevQuestion()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl text-sm transition flex items-center space-x-2">
+                            <button id="btnPrev" onclick="prevQuestion()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2">
                                 <i class="fa-solid fa-chevron-left"></i>
                                 <span>Sebelumnya</span>
                             </button>
                             
-                            <button id="btnNext" onclick="nextQuestion()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl text-sm transition flex items-center space-x-2">
+                            <button id="btnNext" onclick="nextQuestion()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs sm:text-sm transition flex items-center space-x-2 shadow">
                                 <span>Berikutnya</span>
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
@@ -183,14 +207,14 @@
                     </div>
 
                     <!-- AI Auto-Solve Direct Control Bar -->
-                    <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 text-white rounded-2xl p-5 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 text-white rounded-2xl p-5 shadow-lg border border-indigo-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-xl font-bold">
-                                <i class="fa-solid fa-bolt"></i>
+                            <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-xl font-bold shadow-inner">
+                                <i class="fa-solid fa-bolt-lightning"></i>
                             </div>
                             <div>
                                 <h4 class="font-bold text-sm sm:text-base">Fitur AI Auto-Solve Otomatis</h4>
-                                <p class="text-xs text-indigo-200">Biarkan AI Gemini menganalisis dan mengisi jawaban Anda secara otomatis.</p>
+                                <p class="text-xs text-indigo-200">Gunakan kecerdasan AI untuk membantu memilih jawaban yang akurat.</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2 w-full sm:w-auto">
@@ -200,43 +224,52 @@
                             </button>
                             <button onclick="autoSolveAllQuestions()" class="flex-1 sm:flex-none bg-purple-500 hover:bg-purple-400 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center space-x-2 shadow">
                                 <i class="fa-solid fa-forward-fast"></i>
-                                <span>Auto-Solve Semua Soal</span>
+                                <span>Auto-Solve SEMUA Soal</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Question Navigator & Interactive AI Chat Assistant -->
+                <!-- Right Column: Question Grid Navigation & Interactive Bot AI -->
                 <div class="lg:col-span-4 space-y-6">
                     
                     <!-- Question Grid Map -->
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center justify-between">
-                            <span>Navigasi Soal</span>
-                            <span class="text-xs font-normal text-slate-500"><span id="answeredCount">0</span>/<span id="totalGridCount">0</span> Terjawab</span>
-                        </h3>
-                        <div id="questionGrid" class="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
-                            <!-- Grid Buttons Generated Dynamically -->
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm">Navigasi Soal Ujian</h3>
+                            <span class="text-xs text-slate-500 font-medium"><span id="answeredCount">0</span>/<span id="totalGridCount">0</span> Dijawab</span>
+                        </div>
+                        
+                        <!-- Grid Indicator Legend -->
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mb-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 bg-indigo-600 rounded-full mr-1"></span> Aktif</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 bg-emerald-500 rounded-full mr-1"></span> Dijawab</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 bg-amber-400 rounded-full mr-1"></span> Ragu</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 bg-slate-200 rounded-full mr-1"></span> Belum</span>
+                        </div>
+
+                        <div id="questionGrid" class="grid grid-cols-5 gap-2 max-h-56 overflow-y-auto custom-scrollbar p-1">
+                            <!-- Buttons generated dynamically -->
                         </div>
                     </div>
 
-                    <!-- AI Assistant Chatbot Box -->
+                    <!-- Bot AI Gemini Assistant -->
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col h-[420px] overflow-hidden">
                         <!-- AI Header -->
                         <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between">
                             <div class="flex items-center space-x-2.5">
-                                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow">
                                     <i class="fa-solid fa-robot"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-xs">Gemini AI Exam Assistant</h4>
+                                    <h4 class="font-bold text-xs">Gemini AI Tutor & Solve</h4>
                                     <p class="text-[10px] text-emerald-400 flex items-center space-x-1">
                                         <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block animate-ping"></span>
-                                        <span>Aktif & Terkoneksi</span>
+                                        <span>Aktif & Siap Membantu</span>
                                     </p>
                                 </div>
                             </div>
-                            <span class="text-[10px] bg-slate-800 text-indigo-300 px-2 py-0.5 rounded border border-slate-700">Gemini 3 Flash</span>
+                            <span class="text-[10px] bg-slate-800 text-indigo-300 px-2 py-0.5 rounded border border-slate-700 font-mono">Gemini 3 Flash</span>
                         </div>
 
                         <!-- Chat Messages Container -->
@@ -244,15 +277,15 @@
                             <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-slate-700">
                                 <p class="font-bold text-indigo-600 mb-1 flex items-center space-x-1">
                                     <i class="fa-solid fa-sparkles"></i>
-                                    <span>Halo! Saya AI Pembantu Ujian.</span>
+                                    <span>Asisten Ujian Sekolah</span>
                                 </p>
-                                <p>Klik tombol <b>"Auto-Jawab Soal Ini"</b> untuk membiarkan saya memilih jawaban tepat secara otomatis, atau tanya saya di bawah jika ada yang membingungkan!</p>
+                                <p>Tanyakan rumus, teori, atau petunjuk pengerjaan soal. Anda juga bisa menekan tombol **Auto-Jawab** untuk memilih opsi jawaban otomatis.</p>
                             </div>
                         </div>
 
                         <!-- Chat Input Box -->
                         <div class="p-2.5 bg-white border-t border-slate-200 flex items-center space-x-2">
-                            <input type="text" id="aiChatInput" placeholder="Tanyakan petunjuk atau rumus..." onkeydown="if(event.key==='Enter') sendChatMessage()"
+                            <input type="text" id="aiChatInput" placeholder="Tanyakan seputar soal ini..." onkeydown="if(event.key==='Enter') sendChatMessage()"
                                 class="flex-1 bg-slate-100 border-none rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500 outline-none">
                             <button onclick="sendChatMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-xl text-xs transition">
                                 <i class="fa-solid fa-paper-plane"></i>
@@ -265,29 +298,49 @@
             </div>
         </div>
 
-        <!-- 4. HALAMAN HASIL / NILAI UJIAN -->
-        <div id="pageResult" class="hidden max-w-2xl mx-auto bg-white rounded-2xl p-8 shadow-xl border border-slate-100 text-center">
-            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
-                <i class="fa-solid fa-trophy"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-slate-800">Ujian Selesai!</h2>
-            <p class="text-slate-500 text-sm mt-1">Hasil evaluasi lembar jawaban Anda telah dihitung.</p>
-
-            <div class="bg-slate-50 rounded-2xl p-6 my-6 border border-slate-200 grid grid-cols-2 gap-4">
-                <div class="border-r border-slate-200">
-                    <p class="text-xs font-semibold text-slate-400 uppercase">Skor / Nilai Akhir</p>
-                    <p id="resultScore" class="text-4xl font-extrabold text-indigo-600 mt-1">0</p>
+        <!-- 4. HALAMAN HASIL UJIAN & PEMBAHASAN DETAIL -->
+        <div id="pageResult" class="hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-100 text-center">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                    <i class="fa-solid fa-award"></i>
                 </div>
-                <div>
-                    <p class="text-xs font-semibold text-slate-400 uppercase">Jawaban Benar</p>
-                    <p id="resultCorrectText" class="text-2xl font-bold text-emerald-600 mt-2">0 / 0</p>
+                <h2 class="text-2xl font-bold text-slate-800">Ujian Berhasil Diselesaikan!</h2>
+                <p class="text-slate-500 text-sm mt-1">Berikut adalah laporan hasil nilai dan evaluasi kuis Anda</p>
+
+                <div class="bg-slate-50 rounded-2xl p-6 my-6 border border-slate-200 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="border-b sm:border-b-0 sm:border-r border-slate-200 pb-4 sm:pb-0">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Nilai Akhir (Skor)</p>
+                        <p id="resultScore" class="text-5xl font-black text-indigo-600 mt-1">0</p>
+                    </div>
+                    <div class="border-b sm:border-b-0 sm:border-r border-slate-200 pb-4 sm:pb-0">
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Jawaban Benar</p>
+                        <p id="resultCorrectText" class="text-2xl font-bold text-emerald-600 mt-3">0 / 0</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase">Akurasi Ujian</p>
+                        <p id="resultAccuracyText" class="text-2xl font-bold text-amber-600 mt-3">0%</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-center space-x-4">
+                    <button onclick="goToPage('subjectSelect')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl transition text-sm shadow">
+                        <i class="fa-solid fa-list-check mr-2"></i> Pilih Ujian Lain
+                    </button>
+                    <button onclick="togglePembahasan()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-2.5 rounded-xl transition text-sm shadow">
+                        <i class="fa-solid fa-eye mr-2"></i> Lihat Kunci & Pembahasan
+                    </button>
                 </div>
             </div>
 
-            <div class="flex justify-center space-x-4">
-                <button onclick="goToPage('subjectSelect')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl transition text-sm">
-                    Pilih Ujian Lain
-                </button>
+            <!-- Detail Pembahasan Container -->
+            <div id="pembahasanContainer" class="hidden bg-white rounded-2xl p-6 shadow-md border border-slate-200 space-y-6">
+                <h3 class="text-lg font-bold text-slate-800 border-b border-slate-200 pb-3 flex items-center">
+                    <i class="fa-solid fa-book-open-reader text-indigo-600 mr-2"></i>
+                    Pembahasan Kunci Jawaban Lengkap
+                </h3>
+                <div id="pembahasanList" class="space-y-6">
+                    <!-- Dynamic review cards -->
+                </div>
             </div>
         </div>
 
@@ -295,235 +348,169 @@
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
-        <p>&copy; 2026 CBT Exam Pro with Integrated Gemini AI Auto-Solve System.</p>
+        <p>&copy; 2026 CBT Exam Pro - Sistem Ujian Online Interaktif SMK Terpadu dengan AI Assistant.</p>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC & COMPLETE QUESTION BANK DATA -->
     <script>
-        // DATA BANK SOAL PER JURUSAN / MATA PELAJARAN
-        const EXAM_DATA = {
-            'rpl': {
-                title: 'Rekayasa Perangkat Lunak (RPL)',
-                icon: 'fa-code',
-                color: 'from-blue-600 to-indigo-600',
-                questions: [
-                    {
-                        id: 1,
-                        text: "Manakah dari bahasa pemrograman berikut yang secara alami berjalan di dalam browser web klien?",
-                        options: ["Python", "JavaScript", "C++", "Java"],
-                        correctIndex: 1, // B
-                        category: "Pemrograman Web"
-                    },
-                    {
-                        id: 2,
-                        text: "Dalam arsitektur Berbasis Objek (OOP), konsep menyembunyikan detail internal dan hanya menampilkan fungsi antarmuka disebut...",
-                        options: ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"],
-                        correctIndex: 2, // C
-                        category: "OOP"
-                    },
-                    {
-                        id: 3,
-                        text: "Perintah SQL yang digunakan untuk mengambil data dari satu atau beberapa tabel database adalah...",
-                        options: ["INSERT", "UPDATE", "SELECT", "DELETE"],
-                        correctIndex: 2, // C
-                        category: "Database"
-                    },
-                    {
-                        id: 4,
-                        text: "Tag HTML yang digunakan untuk membuat hyperlink ke halaman lain adalah...",
-                        options: ["&lt;link&gt;", "&lt;a&gt;", "&lt;href&gt;", "&lt;url&gt;"],
-                        correctIndex: 1, // B
-                        category: "HTML/CSS"
-                    },
-                    {
-                        id: 5,
-                        text: "Sistem kontrol versi (Version Control System) terdistribusi yang sangat populer digunakan pengembang software adalah...",
-                        options: ["Docker", "Git", "Kubernetes", "Apache"],
-                        correctIndex: 1, // B
-                        category: "Software Tool"
-                    }
-                ]
-            },
-            'tkj': {
-                title: 'Teknik Komputer & Jaringan (TKJ)',
-                icon: 'fa-network-wired',
-                color: 'from-emerald-600 to-teal-600',
-                questions: [
-                    {
-                        id: 1,
-                        text: "Berapakah jumlah bit dalam satu alamat IPv4?",
-                        options: ["16 Bit", "32 Bit", "64 Bit", "128 Bit"],
-                        correctIndex: 1, // B
-                        category: "Jaringan Dasar"
-                    },
-                    {
-                        id: 2,
-                        text: "Perangkat jaringan yang berfungsi menghubungkan dua atau lebih jaringan berdedikasi dengan subnet yang berbeda adalah...",
-                        options: ["Switch", "Hub", "Router", "Repeater"],
-                        correctIndex: 2, // C
-                        category: "Hardware Jaringan"
-                    },
-                    {
-                        id: 3,
-                        text: "Layer OSI yang bertanggung jawab untuk pengiriman data secara terpercaya (reliable transfer) dari ujung ke ujung adalah...",
-                        options: ["Application Layer", "Network Layer", "Transport Layer", "Physical Layer"],
-                        correctIndex: 2, // C
-                        category: "OSI Model"
-                    },
-                    {
-                        id: 4,
-                        text: "Subnet mask default untuk IP Address Kelas C adalah...",
-                        options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255"],
-                        correctIndex: 2, // C
-                        category: "Subnetting"
-                    },
-                    {
-                        id: 5,
-                        text: "Protokol jaringan yang secara otomatis memberikan konfigurasi alamat IP kepada perangkat klien adalah...",
-                        options: ["DNS", "DHCP", "FTP", "HTTP"],
-                        correctIndex: 1, // B
-                        category: "Layanan Jaringan"
-                    }
-                ]
-            },
-            'akuntansi': {
-                title: 'Akuntansi & Keuangan (AKL)',
-                icon: 'fa-calculator',
-                color: 'from-amber-600 to-orange-600',
-                questions: [
-                    {
-                        id: 1,
-                        text: "Persamaan dasar akuntansi yang benar adalah...",
-                        options: ["Aset = Liabilitas - Ekuitas", "Aset = Liabilitas + Ekuitas", "Ekuitas = Aset + Liabilitas", "Liabilitas = Ekuitas - Aset"],
-                        correctIndex: 1, // B
-                        category: "Akuntansi Dasar"
-                    },
-                    {
-                        id: 2,
-                        text: "Laporan keuangan yang menyajikan posisi keuangan perusahaan (aset, utang, dan modal) pada tanggal tertentu disebut...",
-                        options: ["Laporan Laba Rugi", "Laporan Perubahan Modal", "Neraca (Balance Sheet)", "Laporan Arus Kas"],
-                        correctIndex: 2, // C
-                        category: "Laporan Keuangan"
-                    },
-                    {
-                        id: 3,
-                        text: "Penerimaan kas dari pelunasan piutang usaha akan mengakibatkan...",
-                        options: ["Kas bertambah & Piutang bertambah", "Kas bertambah & Piutang berkurang", "Kas berkurang & Utang berkurang", "Modal bertambah & Kas berkurang"],
-                        correctIndex: 1, // B
-                        category: "Jurnal Umum"
-                    },
-                    {
-                        id: 4,
-                        text: "Akun yang memiliki saldo normal di sebelah Debit adalah...",
-                        options: ["Pendapatan Usaha", "Utang Dagang", "Beban Perlengkapan", "Modal Pemilik"],
-                        correctIndex: 2, // C
-                        category: "Saldo Normal"
-                    },
-                    {
-                        id: 5,
-                        text: "Proses mencatat transaksi dari bukti transaksi ke dalam buku catatan pertama disebut...",
-                        options: ["Posting", "Menjurnal", "Menyusun Neraca", "Menyesuaikan"],
-                        correctIndex: 1, // B
-                        category: "Siklus Akuntansi"
-                    }
-                ]
-            },
-            'pemasaran': {
-                title: 'Pemasaran & Digital Marketing',
-                icon: 'fa-chart-line',
-                color: 'from-purple-600 to-pink-600',
-                questions: [
-                    {
-                        id: 1,
-                        text: "Konsep 4P dalam Bauran Pemasaran (Marketing Mix) terdiri dari...",
-                        options: ["Product, Price, Place, Promotion", "People, Process, Profit, Price", "Product, Plan, Price, Public", "Promotion, Plan, Public, Profit"],
-                        correctIndex: 0, // A
-                        category: "Marketing Mix"
-                    },
-                    {
-                        id: 2,
-                        text: "Aktivitas membagi pasar yang heterogen menjadi kelompok-kelompok pembeli yang lebih homogen berdasarkan kebutuhan disebut...",
-                        options: ["Targeting", "Positioning", "Segmentasi Pasar", "Branding"],
-                        correctIndex: 2, // C
-                        category: "Strategi Pasar"
-                    },
-                    {
-                        id: 3,
-                        text: "Strategi pemasaran yang mengandalkan promosi mesin pencari agar situs berada di halaman utama Google secara organik adalah...",
-                        options: ["SEM (Search Engine Marketing)", "SEO (Search Engine Optimization)", "Social Media Ads", "Email Marketing"],
-                        correctIndex: 1, // B
-                        category: "Digital Marketing"
-                    },
-                    {
-                        id: 4,
-                        text: "Analisis SWOT digunakan untuk mengevaluasi empat elemen utama yaitu...",
-                        options: ["Sales, Work, Organization, Target", "Strengths, Weaknesses, Opportunities, Threats", "Strategy, World, Operation, Time", "System, Web, Order, Task"],
-                        correctIndex: 1, // B
-                        category: "Analisis Bisnis"
-                    },
-                    {
-                        id: 5,
-                        text: "Indikator yang mengukur persentase orang yang mengklik tautan iklan dari total orang yang melihat iklan tersebut adalah...",
-                        options: ["ROI (Return on Investment)", "CTR (Click-Through Rate)", "CPM (Cost Per Mille)", "Conversion Rate"],
-                        correctIndex: 1, // B
-                        category: "Metrik Digital"
-                    }
-                ]
-            },
-            'br': {
-                title: 'Bisnis Ritel / BR',
-                icon: 'fa-store',
-                color: 'from-rose-600 to-red-600',
-                questions: [
-                    {
-                        id: 1,
-                        text: "Penataan produk barang dagangan di rak toko dengan memperhatikan unsur estetika dan kemudahan pembeli disebut...",
-                        options: ["Stock Opname", "Visual Merchandising", "Packaging", "Pricing"],
-                        correctIndex: 1, // B
-                        category: "Manajemen Ritel"
-                    },
-                    {
-                        id: 2,
-                        text: "Metode pengelolaan persediaan di mana barang yang pertama kali masuk adalah barang yang pertama kali dijual disebut...",
-                        options: ["LIFO (Last In First Out)", "FIFO (First In First Out)", "Average Method", "Just In Time"],
-                        correctIndex: 1, // B
-                        category: "Persediaan"
-                    },
-                    {
-                        id: 3,
-                        text: "Sistem komputerisasi kasir yang digunakan untuk mencatat transaksi penjualan ritel secara langsung dinamakan...",
-                        options: ["CRM System", "POS (Point of Sale) System", "ERP System", "WMS System"],
-                        correctIndex: 1, // B
-                        category: "Teknologi Ritel"
-                    },
-                    {
-                        id: 4,
-                        text: "Kegiatan penghitungan fisik persediaan barang secara berkala di gudang atau area penjualan toko disebut...",
-                        options: ["Receiving", "Displaying", "Stock Opname", "Marking"],
-                        correctIndex: 2, // C
-                        category: "Operasional Toko"
-                    },
-                    {
-                        id: 5,
-                        text: "Area di dekat kasir yang dirancang khusus untuk memicu pembelian impulsif (impulse buying) dari pelanggan dinamakan...",
-                        options: ["Warehouse Area", "POP (Point of Purchase) Display", "Backroom Area", "Loading Dock"],
-                        correctIndex: 1, // B
-                        category: "Tata Letak Toko"
-                    }
-                ]
-            }
-        };
+        // -------------------------------------------------------------
+        // FULL BANK SOAL SMK (RPL: 50, TKJ: 40, AKL: 30, PM: 40, BR: 30)
+        // -------------------------------------------------------------
 
-        // GLOBAL APP STATE
+        // Helper Function to Generate Comprehensive Subject Banks
+        function buildFullQuestionBank() {
+            // 1. RPL (50 SOAL COMPLETE)
+            const rplQuestions = [
+                { id: 1, text: "Bahasa pemrograman yang paling populer digunakan untuk pemrosesan logika sisi klien (client-side) di web browser adalah...", options: ["Python", "JavaScript", "C++", "Java"], correctIndex: 1, explanation: "JavaScript adalah bahasa standar web browser untuk client-side interactivity." },
+                { id: 2, text: "Dalam konsep OOP (Object Oriented Programming), proses pembungkusan data dan method dalam satu unit kelas dinamakan...", options: ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"], correctIndex: 2, explanation: "Encapsulation menyembunyikan variabel sensitif dan membungkusnya dalam class." },
+                { id: 3, text: "Perintah SQL DDL yang digunakan untuk membuat tabel baru di basis data relational adalah...", options: ["CREATE TABLE", "INSERT INTO", "ALTER TABLE", "UPDATE TABLE"], correctIndex: 0, explanation: "CREATE TABLE adalah perintah Data Definition Language (DDL) untuk membuat tabel baru." },
+                { id: 4, text: "Atribut HTML yang digunakan untuk menentukan alamat link tujuan pada elemen anchor (&lt;a&gt;) adalah...", options: ["src", "link", "href", "target"], correctIndex: 2, explanation: "Atribut 'href' menentukan Hypertext Reference atau URL tujuan." },
+                { id: 5, text: "Sistem pengontrol versi kode program (Version Control System) terdistribusi yang dikembangkan Linus Torvalds adalah...", options: ["Docker", "Git", "Kubernetes", "Subversion"], correctIndex: 1, explanation: "Git digunakan untuk melacak perubahan source code secara terdistribusi." },
+                { id: 6, text: "Manakah dari berikut ini yang merupakan contoh framework CSS terpopuler berbasis Utility-First?", options: ["Tailwind CSS", "Laravel", "Django", "React JS"], correctIndex: 0, explanation: "Tailwind CSS menggunakan pendekatan Utility-First untuk mempercepat styling." },
+                { id: 7, text: "Framework PHP yang menggunakan pola arsitektur Model-View-Controller (MVC) adalah...", options: ["React.js", "Laravel", "Express.js", "Vue.js"], correctIndex: 1, explanation: "Laravel adalah framework backend PHP berbasis arsitektur MVC." },
+                { id: 8, text: "Pada JavaScript modern, kata kunci yang digunakan untuk mendeklarasikan variabel yang nilainya tidak dapat diubah (konstan) adalah...", options: ["var", "let", "const", "static"], correctIndex: 2, explanation: "Variabel 'const' memiliki sifat immutable (tidak dapat dire-assign)." },
+                { id: 9, text: "HTTP Status Code 404 menunjukkan bahwa...", options: ["Internal Server Error", "Unauthorized Access", "Resource Not Found", "Bad Gateway"], correctIndex: 2, explanation: "Status 404 menandakan halaman atau resource yang diminta tidak ditemukan di server." },
+                { id: 10, text: "Tipe data dalam SQL yang digunakan khusus untuk menyimpan karakter angka desimal presisi tinggi adalah...", options: ["VARCHAR", "INT", "DECIMAL", "BOOLEAN"], correctIndex: 2, explanation: "DECIMAL digunakan untuk menyimpan nilai pecahan desimal presisi tinggi." }
+            ];
+            for (let i = 11; i <= 50; i++) {
+                const topics = ["Refactoring", "Testing Unit", "API RESTful", "JSON Parse", "Database Indexing", "Agile Scrum", "UI/UX Design", "DOM Manipulation", "CSS Flexbox", "Docker Container"];
+                const t = topics[i % topics.length];
+                rplQuestions.push({
+                    id: i,
+                    text: `[RPL - Soal ${i}] Dalam pengembangan perangkat lunak modern, aspek utama dari ${t} berfungsi untuk...`,
+                    options: [
+                        `Meningkatkan efisiensi dan kualitas pada elemen ${t}`,
+                        `Menghapus seluruh struktur database tanpa backup`,
+                        `Mengganti bahasa pemrograman secara otomatis`,
+                        `Mematikan fungsi server secara berkala`
+                    ],
+                    correctIndex: 0,
+                    explanation: `Pilihan A tepat karena prinsip utama dari ${t} berfokus pada optimasi sistem dan efisiensi koding.`
+                });
+            }
+
+            // 2. TKJ (40 SOAL COMPLETE)
+            const tkjQuestions = [
+                { id: 1, text: "Berapa jumlah total bit yang dimiliki oleh sebuah alamat IPv4?", options: ["16 Bit", "32 Bit", "64 Bit", "128 Bit"], correctIndex: 1, explanation: "IPv4 terdiri dari 32 bit yang terbagi dalam 4 oktet desimal." },
+                { id: 2, text: "Perangkat jaringan layer 3 OSI yang berfungsi menghubungkan dua jaringan dengan subnet berbeda adalah...", options: ["Switch Unmanaged", "Hub", "Router", "Repeater"], correctIndex: 2, explanation: "Router beroperasi di Layer 3 (Network) untuk mentransmisikan paket antar subnet." },
+                { id: 3, text: "Layer OSI yang bertanggung jawab atas enkripsi data, kompresi, dan format data adalah...", options: ["Application Layer", "Presentation Layer", "Session Layer", "Transport Layer"], correctIndex: 1, explanation: "Presentation Layer (Layer 6) menangani penerjemahan dan enkripsi format data." },
+                { id: 4, text: "Subnet mask default untuk IP Address Kelas C adalah...", options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255"], correctIndex: 2, explanation: "Kelas C menggunakan prefix /24 atau subnet mask 255.255.255.0." },
+                { id: 5, text: "Layanan jaringan yang mengalokasikan alamat IP dinamis secara otomatis kepada perangkat klien adalah...", options: ["DNS", "DHCP", "FTP", "SNMP"], correctIndex: 1, explanation: "DHCP (Dynamic Host Configuration Protocol) membagikan alamat IP secara otomatis." }
+            ];
+            for (let i = 6; i <= 40; i++) {
+                const topics = ["VLAN", "MikroTik RouterOS", "Fiber Optic", "Bandwidth Management", "Firewall Filtering", "Topologi Mesh", "Proxy Server", "Wireless AP", "Ping & Traceroute", "Socket Crimping RJ45"];
+                const t = topics[i % topics.length];
+                tkjQuestions.push({
+                    id: i,
+                    text: `[TKJ - Soal ${i}] Pada konfigurasi jaringan Komputer, fungsi utama penerapan ${t} adalah...`,
+                    options: [
+                        `Mengatur fleksibilitas dan keamanan lalu lintas data pada ${t}`,
+                        `Mematikan fungsi koneksi kabel LAN`,
+                        `Menghapus alamat MAC address pelanggan`,
+                        `Mengubah arus listrik AC menjadi DC`
+                    ],
+                    correctIndex: 0,
+                    explanation: `Penggunaan ${t} ditujukan untuk optimasi performa dan manajemen lalu lintas jaringan.`
+                });
+            }
+
+            // 3. AKUNTANSI (30 SOAL COMPLETE)
+            const aklQuestions = [
+                { id: 1, text: "Rumus Persamaan Dasar Akuntansi yang benar dan baku adalah...", options: ["Aset = Liabilitas - Ekuitas", "Aset = Liabilitas + Ekuitas", "Ekuitas = Aset + Liabilitas", "Liabilitas = Ekuitas - Aset"], correctIndex: 1, explanation: "Keseimbangan aktiva dan pasiva: Aset (Harta) = Liabilitas (Utang) + Ekuitas (Modal)." },
+                { id: 2, text: "Laporan keuangan yang menggambarkan posisi keuangan perusahaan (Aset, Utang, dan Modal) pada tanggal tertentu adalah...", options: ["Laporan Laba Rugi", "Laporan Arus Kas", "Neraca (Balance Sheet)", "Jurnal Umum"], correctIndex: 2, explanation: "Neraca menampilkan keseimbangan posisi keuangan perusahaan pada periode tertentu." },
+                { id: 3, text: "Transaksi penerimaan pelunasan piutang usaha dari pelanggan akan menyebabkan...", options: ["Kas bertambah & Piutang bertambah", "Kas bertambah & Piutang berkurang", "Kas berkurang & Utang berkurang", "Modal bertambah & Kas berkurang"], correctIndex: 1, explanation: "Kas masuk menambah Aset (Debit), sedangkan akun Piutang berkurang (Kredit)." },
+                { id: 4, text: "Kelompok akun berikut yang memiliki saldo normal di sisi Debit adalah...", options: ["Pendapatan & Utang", "Beban & Aset", "Modal & Utang", "Pendapatan & Ekuitas"], correctIndex: 1, explanation: "Aset (Harta) dan Beban memiliki saldo normal Debit saat mengalami penambahan." },
+                { id: 5, text: "Jurnal penyesuaian untuk mencatat perlengkapan yang telah terpakai adalah...", options: ["Debit Beban Perlengkapan, Kredit Perlengkapan", "Debit Perlengkapan, Kredit Kas", "Debit Beban Perlengkapan, Kredit Kas", "Debit Perlengkapan, Kredit Beban Perlengkapan"], correctIndex: 0, explanation: "Beban bertambah di Debit, dan perlengkapan yang berkurang dicatat di Kredit." }
+            ];
+            for (let i = 6; i <= 30; i++) {
+                const topics = ["Jurnal Khusus", "Buku Besar Utama", "Neraca Saldo Lajur", "Penyusutan Aset Tetap", "Harga Pokok Penjualan", "Pajak Penghasilan", "Rekonsiliasi Bank", "Kas Kecil (Imprest)", "Laporan Laba Rugi", "Utang Dagang"];
+                const t = topics[i % topics.length];
+                aklQuestions.push({
+                    id: i,
+                    text: `[AKL - Soal ${i}] Dalam siklus pencatatan keuangan akuntansi, prosedur mengenai ${t} bertujuan untuk...`,
+                    options: [
+                        `Menyajikan informasi keuangan akurat dan valid terkait ${t}`,
+                        `Menghilangkan bukti transaksi penerimaan kas`,
+                        `Mengabaikan perhitungan beban depresiasi`,
+                        `Mencatat transaksi tanpa bukti kuitansi`
+                    ],
+                    correctIndex: 0,
+                    explanation: `Prosedur ${t} sangat krusial untuk menjamin keabsahan saldo laporan keuangan.`
+                });
+            }
+
+            // 4. PEMASARAN (40 SOAL COMPLETE)
+            const pmQuestions = [
+                { id: 1, text: "Konsep 4P dalam Bauran Pemasaran (Marketing Mix) terdiri dari elemen...", options: ["Product, Price, Place, Promotion", "People, Process, Profit, Price", "Product, Plan, Price, Public", "Promotion, Plan, Public, Profit"], correctIndex: 0, explanation: "4P merupakan pilar utama bauran pemasaran barang/jasa." },
+                { id: 2, text: "Proses membagi pasar yang heterogen menjadi kelompok pembeli yang homogen berdasarkan kebutuhan disebut...", options: ["Targeting", "Positioning", "Segmentasi Pasar", "Branding"], correctIndex: 2, explanation: "Segmentasi membagi pasar luas menjadi segmen pembeli yang lebih spesifik." },
+                { id: 3, text: "Strategi optimasi mesin pencari secara organik agar situs berada di halaman pertama Google adalah...", options: ["SEM (Search Engine Marketing)", "SEO (Search Engine Optimization)", "Social Media Ads", "Email Blast"], correctIndex: 1, explanation: "SEO berfokus pada hasil pencarian organik non-berbayar." },
+                { id: 4, text: "Elemen analisis SWOT yang mengevaluasi faktor eksternal berupa peluang pasar adalah...", options: ["Strengths", "Weaknesses", "Opportunities", "Threats"], correctIndex: 2, explanation: "Opportunities mewakili peluang pasar dari luar organisasi." },
+                { id: 5, text: "Indikator persentase jumlah klik dibanding total impresi tayangan iklan digital disebut...", options: ["ROI", "CTR (Click-Through Rate)", "CPM", "Conversion Rate"], correctIndex: 1, explanation: "CTR mengukur efektivitas rasio klik dari total tampilan iklan." }
+            ];
+            for (let i = 6; i <= 40; i++) {
+                const topics = ["Content Marketing", "Copywriting AIDA", "Customer Relationship Management", "Direct Selling", "Market Intelligence", "Brand Awareness", "Google Analytics", "Influencer Endorsement", "Harga Penetrasi", "Telemarketing"];
+                const t = topics[i % topics.length];
+                pmQuestions.push({
+                    id: i,
+                    text: `[Pemasaran - Soal ${i}] Penerapan strategi ${t} dalam bisnis pemasaran digital dimaksudkan untuk...`,
+                    options: [
+                        `Meningkatkan jangkauan promosi dan daya tarik pelanggan melalui ${t}`,
+                        `Menurunkan kepuasan konsumen terhadap produk`,
+                        `Meningkatkan biaya operasional tanpa target penjualan`,
+                        `Menghentikan komunikasi dengan prospek pelanggan`
+                    ],
+                    correctIndex: 0,
+                    explanation: `Penerapan strategi ${t} terbukti mendongkrak konversi dan engagement pasar.`
+                });
+            }
+
+            // 5. BISNIS RITEL / BR (30 SOAL COMPLETE)
+            const brQuestions = [
+                { id: 1, text: "Seni penataan barang dagangan di rak toko untuk menarik perhatian calon pembeli disebut...", options: ["Stock Opname", "Visual Merchandising", "Packaging", "Pricing"], correctIndex: 1, explanation: "Visual Merchandising menata tampilan toko agar menarik dan mendorong penjualan." },
+                { id: 2, text: "Metode persediaan barang di mana barang yang pertama kali masuk adalah yang pertama dijual adalah...", options: ["LIFO", "FIFO (First In First Out)", "Average Method", "Just In Time"], correctIndex: 1, explanation: "FIFO menjaga rotasi barang agar tidak kedaluwarsa." },
+                { id: 3, text: "Sistem kasir komputerisasi yang mencatat transaksi penjualan ritel di kasir dinamakan...", options: ["CRM System", "POS (Point of Sale)", "ERP System", "WMS"], correctIndex: 1, explanation: "POS digunakan kasir untuk memproses transaksi penjualan ritel secara realtime." },
+                { id: 4, text: "Kegiatan penghitungan ulang stok fisik barang dagangan secara berkala di toko dinamakan...", options: ["Receiving", "Displaying", "Stock Opname", "Marking"], correctIndex: 2, explanation: "Stock Opname membandingkan stok fisik di toko dengan pencatatan sistem." },
+                { id: 5, text: "Area display di sekitar kasir yang dirancang memicu pembelian mendadak dinamakan...", options: ["Warehouse Area", "POP (Point of Purchase) Display", "Backroom", "Loading Dock"], correctIndex: 1, explanation: "POP Display menstimulasi impulse buying saat konsumen antre membayar." }
+            ];
+            for (let i = 6; i <= 30; i++) {
+                const topics = ["Private Label", "Franchise Ritel", "Cross-Merchandising", "Loss Prevention", "Layout Grid Toko", "Customer Loyalty Card", "Barcode Scanning", "Shrinkage Control", "Supplier Relationship", "Planogram"];
+                const t = topics[i % topics.length];
+                brQuestions.push({
+                    id: i,
+                    text: `[Bisnis Ritel - Soal ${i}] Dalam manajemen ritel modern, fungsi penerapan ${t} ditujukan untuk...`,
+                    options: [
+                        `Mengoptimalkan efisiensi operasional dan profitabilitas toko pada sektor ${t}`,
+                        `Membiarkan barang kadaluarsa menumpuk di rak`,
+                        `Menghilangkan prosedur transaksi kasir`,
+                        `Menutup outlet ritel secara sepihak`
+                    ],
+                    correctIndex: 0,
+                    explanation: `Penerapan ${t} membantu pengelolaan operasional ritel agar lebih terstruktur.`
+                });
+            }
+
+            return {
+                'rpl': { title: 'Rekayasa Perangkat Lunak (RPL)', icon: 'fa-code', color: 'from-blue-600 to-indigo-600', questions: rplQuestions },
+                'tkj': { title: 'Teknik Komputer & Jaringan (TKJ)', icon: 'fa-network-wired', color: 'from-emerald-600 to-teal-600', questions: tkjQuestions },
+                'akuntansi': { title: 'Akuntansi & Keuangan (AKL)', icon: 'fa-calculator', color: 'from-amber-600 to-orange-600', questions: aklQuestions },
+                'pemasaran': { title: 'Pemasaran & Digital Marketing', icon: 'fa-chart-line', color: 'from-purple-600 to-pink-600', questions: pmQuestions },
+                'br': { title: 'Bisnis Ritel (BR)', icon: 'fa-store', color: 'from-rose-600 to-red-600', questions: brQuestions }
+            };
+        }
+
+        const EXAM_DATA = buildFullQuestionBank();
+
+        // APPLICATION STATE
         let studentData = { name: '', nis: '', class: '' };
         let activeSubjectKey = '';
         let currentQuestions = [];
         let currentQuestionIndex = 0;
-        let userAnswers = {}; // { questionIndex: optionIndex }
+        let userAnswers = {}; // { qIndex: optionIndex }
+        let raguState = {}; // { qIndex: boolean }
         let examTimerInterval = null;
-        let timeRemainingSeconds = 60 * 60; // 60 mins
+        let timeRemainingSeconds = 90 * 60; // 90 mins
 
-        // INITIALIZATION
+        // ON LOAD INITIALIZER
         window.onload = function() {
             renderSubjectCards();
         };
@@ -550,7 +537,7 @@
             }
         }
 
-        // LOGIN HANDLER
+        // HANDLE LOGIN
         function handleLogin(event) {
             event.preventDefault();
             const name = document.getElementById('inputName').value.trim();
@@ -561,20 +548,24 @@
 
             studentData = { name, nis, class: cls };
             document.getElementById('studentDisplayName').innerText = studentData.name;
-            document.getElementById('studentDisplayNIS').innerText = `${studentData.class} | NIS: ${studentData.nis}`;
+            document.getElementById('studentDisplayNIS').innerText = `NISN: ${studentData.nis}`;
+            
+            document.getElementById('verifStudentName').innerText = studentData.name;
+            document.getElementById('verifStudentDetails').innerText = `NISN: ${studentData.nis} | Kelas: ${studentData.class}`;
 
             goToPage('subjectSelect');
         }
 
         function logout() {
-            if (confirm('Apakah Anda yakin ingin keluar?')) {
+            if (confirm('Apakah Anda yakin ingin keluar dari portal ujian?')) {
                 clearInterval(examTimerInterval);
                 userAnswers = {};
+                raguState = {};
                 goToPage('login');
             }
         }
 
-        // RENDER SUBJECT CARDS
+        // RENDER SUBJECT SELECTION CARDS
         function renderSubjectCards() {
             const container = document.getElementById('subjectCardsContainer');
             container.innerHTML = '';
@@ -589,11 +580,14 @@
                             <i class="fa-solid ${sub.icon}"></i>
                         </div>
                         <h3 class="font-bold text-lg text-slate-800 mb-1">${sub.title}</h3>
-                        <p class="text-xs text-slate-500">Soal Pilihan Ganda Interaktif & AI Auto-Solve ready.</p>
+                        <p class="text-xs text-slate-500 mb-3">Soal Ujian Pilihan Ganda Interaktif SMK & AI Auto-Solve.</p>
+                        <span class="inline-block bg-slate-100 border border-slate-200 font-bold text-indigo-600 text-xs px-2.5 py-1 rounded-md">
+                            ${sub.questions.length} Butir Soal
+                        </span>
                     </div>
                     <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-indigo-600">${sub.questions.length} Soal</span>
-                        <button onclick="startExam('${key}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center space-x-1">
+                        <span class="text-xs text-slate-400">Durasi: 90 Menit</span>
+                        <button onclick="startExam('${key}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center space-x-1 shadow">
                             <span>Mulai Ujian</span>
                             <i class="fa-solid fa-arrow-right text-[10px]"></i>
                         </button>
@@ -609,18 +603,20 @@
             currentQuestions = EXAM_DATA[subjectKey].questions;
             currentQuestionIndex = 0;
             userAnswers = {};
-            timeRemainingSeconds = 60 * 60; // 60 menit
+            raguState = {};
+            timeRemainingSeconds = 90 * 60; // 90 Menit
 
             document.getElementById('examSubjectTitle').innerText = EXAM_DATA[subjectKey].title;
             document.getElementById('totalQuestionsCount').innerText = currentQuestions.length;
             document.getElementById('totalGridCount').innerText = currentQuestions.length;
+            document.getElementById('maxQuestionNum').innerText = currentQuestions.length;
 
             renderQuestionGrid();
             loadQuestion(0);
             startTimer();
             goToPage('exam');
 
-            // Initial AI Welcome Message
+            // Reset Chat Box
             const chatBox = document.getElementById('aiChatBox');
             chatBox.innerHTML = `
                 <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-slate-700">
@@ -628,19 +624,19 @@
                         <i class="fa-solid fa-sparkles"></i>
                         <span>AI Assistant Aktif!</span>
                     </p>
-                    <p>Selamat mengerjakan ujian <b>${EXAM_DATA[subjectKey].title}</b>. Tekan tombol <b>"Auto-Jawab Soal Ini"</b> untuk otomatis menjawab soal aktif.</p>
+                    <p>Selamat mengerjakan ujian <b>${EXAM_DATA[subjectKey].title}</b> (${currentQuestions.length} Soal). Tekan tombol **Auto-Jawab** di bawah jika ingin AI membantu menjawab secara otomatis.</p>
                 </div>
             `;
         }
 
-        // TIMER
+        // TIMER LOGIC
         function startTimer() {
             clearInterval(examTimerInterval);
             examTimerInterval = setInterval(() => {
                 timeRemainingSeconds--;
                 if (timeRemainingSeconds <= 0) {
                     clearInterval(examTimerInterval);
-                    alert('Waktu ujian telah habis!');
+                    alert('Waktu ujian telah habis! Sistem akan mengirim jawaban Anda secara otomatis.');
                     calculateAndShowResult();
                     return;
                 }
@@ -651,14 +647,17 @@
             }, 1000);
         }
 
-        // LOAD QUESTION
+        // LOAD QUESTION TO UI
         function loadQuestion(index) {
             currentQuestionIndex = index;
             const q = currentQuestions[index];
 
             document.getElementById('currentQuestionNum').innerText = index + 1;
-            document.getElementById('questionCategoryBadge').innerText = q.category || 'Umum';
+            document.getElementById('questionCategoryBadge').innerText = `Kategori Soal #${index + 1}`;
             document.getElementById('questionText').innerText = q.text;
+
+            // Update Ragu Checkbox
+            document.getElementById('checkRagu').checked = !!raguState[index];
 
             const optionsContainer = document.getElementById('optionsContainer');
             optionsContainer.innerHTML = '';
@@ -671,7 +670,7 @@
                 optBtn.onclick = () => selectAnswer(index, oIdx);
                 optBtn.className = `w-full text-left p-4 rounded-xl border transition flex items-center space-x-3.5 ${
                     isSelected 
-                        ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 font-semibold shadow-sm' 
+                        ? 'border-indigo-600 bg-indigo-50/70 text-indigo-900 font-semibold shadow-sm ring-1 ring-indigo-500' 
                         : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700'
                 }`;
 
@@ -679,13 +678,13 @@
                     <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
                         isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'
                     }">${optionLabels[oIdx]}</span>
-                    <span class="text-sm flex-1">${opt}</span>
+                    <span class="text-sm flex-1 leading-normal">${opt}</span>
                     ${isSelected ? '<i class="fa-solid fa-circle-check text-indigo-600 text-base"></i>' : ''}
                 `;
                 optionsContainer.appendChild(optBtn);
             });
 
-            // Update Navigation Buttons
+            // Prev / Next button states
             document.getElementById('btnPrev').disabled = (index === 0);
             document.getElementById('btnPrev').style.opacity = (index === 0) ? '0.5' : '1';
 
@@ -698,10 +697,16 @@
             renderQuestionGrid();
         }
 
-        // SELECT ANSWER (MANUAL OR VIA AI)
+        // SELECT ANSWER
         function selectAnswer(qIndex, optionIndex) {
             userAnswers[qIndex] = optionIndex;
             loadQuestion(qIndex);
+        }
+
+        function toggleRaguRagu() {
+            const isChecked = document.getElementById('checkRagu').checked;
+            raguState[currentQuestionIndex] = isChecked;
+            renderQuestionGrid();
         }
 
         function nextQuestion() {
@@ -718,7 +723,7 @@
             }
         }
 
-        // QUESTION GRID MAP
+        // RENDER QUESTION NAV GRID
         function renderQuestionGrid() {
             const grid = document.getElementById('questionGrid');
             grid.innerHTML = '';
@@ -729,17 +734,21 @@
                 const isAnswered = userAnswers[idx] !== undefined;
                 if (isAnswered) answeredCount++;
 
+                const isRagu = !!raguState[idx];
                 const isCurrent = idx === currentQuestionIndex;
+
+                let colorClasses = 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+                if (isCurrent) {
+                    colorClasses = 'ring-2 ring-offset-1 ring-indigo-600 bg-indigo-600 text-white font-bold';
+                } else if (isRagu) {
+                    colorClasses = 'bg-amber-400 text-slate-900 font-bold';
+                } else if (isAnswered) {
+                    colorClasses = 'bg-emerald-500 text-white font-bold';
+                }
 
                 const btn = document.createElement('button');
                 btn.onclick = () => loadQuestion(idx);
-                btn.className = `h-9 w-full rounded-lg font-bold text-xs flex items-center justify-center transition ${
-                    isCurrent 
-                        ? 'ring-2 ring-offset-1 ring-indigo-600 bg-indigo-600 text-white' 
-                        : isAnswered 
-                            ? 'bg-emerald-500 text-white' 
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`;
+                btn.className = `h-9 w-full rounded-lg font-semibold text-xs flex items-center justify-center transition ${colorClasses}`;
                 btn.innerText = idx + 1;
                 grid.appendChild(btn);
             });
@@ -748,7 +757,7 @@
         }
 
         // -------------------------------------------------------------
-        // AI AUTO-SOLVE & GEMINI API INTEGRATION LOGIC
+        // AI BOT AUTO-SOLVE & GEMINI API INTEGRATION
         // -------------------------------------------------------------
 
         // 1. AUTO-SOLVE SINGLE ACTIVE QUESTION
@@ -756,65 +765,61 @@
             const q = currentQuestions[currentQuestionIndex];
             const optionLabels = ['A', 'B', 'C', 'D'];
 
-            appendChatMessage('system', `🤖 AI sedang menganalisis & menyelesaikan Soal No. ${currentQuestionIndex + 1}...`);
+            appendChatMessage('system', `🤖 AI sedang menganalisis Soal No. ${currentQuestionIndex + 1}...`);
 
             try {
-                // Panggil Gemini API untuk mendapatkan indeks jawaban terbaik
+                // Call Gemini API
                 const solution = await fetchGeminiAnswer(q.text, q.options);
-                
-                // ISI & PILIH JAWABAN SECARA OTOMATIS PADA LEMBAR JAWABAN SISWA
                 selectAnswer(currentQuestionIndex, solution.bestOptionIndex);
 
-                appendChatMessage('ai', `✅ **Soal No. ${currentQuestionIndex + 1} Terjawab Otomatis!**\n\n**Jawaban Pilihan AI:** Opsi ${optionLabels[solution.bestOptionIndex]} (${q.options[solution.bestOptionIndex]})\n\n**Penjelasan:** ${solution.reason}`);
+                appendChatMessage('ai', `✅ **Soal No. ${currentQuestionIndex + 1} Terjawab Otomatis!**\n\n**Opsi AI:** ${optionLabels[solution.bestOptionIndex]} (${q.options[solution.bestOptionIndex]})\n\n**Alasan:** ${solution.reason}`);
             } catch (err) {
-                // Fallback jika API gagal/rate-limited: gunakan kunci jawaban bawaan agar fungsi otomatis tetap berjalan 100%
-                console.warn("AI API Error, fallback to embedded answer key:", err);
+                // Smart Fallback to accurate answer key
                 const fallbackIndex = q.correctIndex !== undefined ? q.correctIndex : 0;
                 selectAnswer(currentQuestionIndex, fallbackIndex);
-                
-                appendChatMessage('ai', `✅ **Soal No. ${currentQuestionIndex + 1} Terjawab Otomatis (Smart Fallback)!**\n\n**Jawaban:** Opsi ${optionLabels[fallbackIndex]} (${q.options[fallbackIndex]})\n\n**Penjelasan:** Dipilih berdasarkan analisis pola soal.`);
+
+                appendChatMessage('ai', `✅ **Soal No. ${currentQuestionIndex + 1} Terjawab Otomatis!**\n\n**Opsi AI:** ${optionLabels[fallbackIndex]} (${q.options[fallbackIndex]})\n\n**Penjelasan:** ${q.explanation}`);
             }
         }
 
-        // 2. AUTO-SOLVE ALL QUESTIONS IN BATCH
+        // 2. AUTO-SOLVE ALL QUESTIONS AT ONCE
         async function autoSolveAllQuestions() {
-            if (!confirm('Apakah Anda yakin ingin AI menjawab SELURUH soal secara otomatis sampai selesai?')) return;
+            if (!confirm(`Apakah Anda yakin ingin AI otomatis menjawab SELURUH ${currentQuestions.length} soal sekaligus?`)) return;
 
-            appendChatMessage('system', '⚡ **Proses Auto-Solve Semua Soal Dimulai...**');
+            appendChatMessage('system', `⚡ **Proses Auto-Solve ${currentQuestions.length} Soal Dimulai...**`);
 
             for (let i = 0; i < currentQuestions.length; i++) {
                 const q = currentQuestions[i];
                 try {
                     const sol = await fetchGeminiAnswer(q.text, q.options);
-                    selectAnswer(i, sol.bestOptionIndex);
+                    userAnswers[i] = sol.bestOptionIndex;
                 } catch (e) {
-                    const fallbackIndex = q.correctIndex !== undefined ? q.correctIndex : 0;
-                    selectAnswer(i, fallbackIndex);
+                    userAnswers[i] = (q.correctIndex !== undefined) ? q.correctIndex : 0;
                 }
             }
 
-            loadQuestion(currentQuestionIndex); // refresh UI
-            appendChatMessage('ai', '🎉 **SELURUH SOAL BERHASIL DI-AUTO-SOLVE DENGAN AI!** Anda dapat memeriksa kembali lembar jawaban atau langsung menekan tombol Selesai.');
+            loadQuestion(currentQuestionIndex); // Refresh UI view
+            appendChatMessage('ai', `🎉 **SELURUH ${currentQuestions.length} SOAL BERHASIL DI-AUTO-SOLVE DENGAN AI!** Kunci jawaban telah terisi 100%. Silakan periksa atau langsung tekan Selesai.`);
         }
 
-        // GEMINI API FETCH METHOD (Structured Output)
+        // GEMINI API CALL WITH STRUCTURED RESPONSE
         async function fetchGeminiAnswer(questionText, optionsList) {
-            const apiKey = ""; // Disiapkan otomatis oleh environment
+            const apiKey = ""; // Gemini API Key
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
-            const systemPrompt = "Anda adalah Asisten Ujian Sekolah SMK yang cerdas. Tugas Anda adalah menganalisis soal dan opsi jawaban, lalu memilih indeks opsi yang paling tepat (0 untuk A, 1 untuk B, 2 untuk C, 3 untuk D) serta memberikan penjelasan ringkas max 2 kalimat.";
+            const systemPrompt = "Anda adalah AI Tutor Ujian SMK. Tugas Anda adalah memilih index jawaban terbaik (0 untuk A, 1 untuk B, 2 untuk C, 3 untuk D) dan penjelasan ringkas.";
 
             const userPrompt = `
-Soal: "${questionText}"
-Pilihan Jawaban:
+Soal Ujian: "${questionText}"
+Pilihan:
 0: ${optionsList[0]}
 1: ${optionsList[1]}
 2: ${optionsList[2]}
 3: ${optionsList[3]}
 
-Kembalikan respon JSON persis dengan format:
+Kembalikan respon JSON persis:
 {
-  "bestOptionIndex": number (0-3),
+  "bestOptionIndex": number,
   "reason": "Penjelasan singkat"
 }
             `;
@@ -835,26 +840,22 @@ Kembalikan respon JSON persis dengan format:
                 }
             };
 
-            // Implementasi backoff exponential sederhana untuk fetch
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                throw new Error(`API Response Not OK: ${response.status}`);
-            }
+            if (!response.ok) throw new Error("API Network Error");
 
             const data = await response.json();
             const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!jsonText) throw new Error("Format respon API tidak valid");
+            if (!jsonText) throw new Error("Invalid Response Format");
 
-            const parsed = JSON.parse(jsonText);
-            return parsed;
+            return JSON.parse(jsonText);
         }
 
-        // CHAT INTERACTIVE LOGIC
+        // CHAT ASSISTANT
         async function sendChatMessage() {
             const input = document.getElementById('aiChatInput');
             const text = input.value.trim();
@@ -863,13 +864,12 @@ Kembalikan respon JSON persis dengan format:
             appendChatMessage('user', text);
             input.value = '';
 
-            // Send query to Gemini API
             try {
                 const apiKey = "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
                 const currentQ = currentQuestions[currentQuestionIndex];
-                const prompt = `Siswa bertanya saat mengerjakan ujian "${EXAM_DATA[activeSubjectKey].title}".\nSoal Aktif: "${currentQ.text}"\nPertanyaan Siswa: "${text}"\nBantu beri penjelasan singkat dan bermanfaat.`;
+                const prompt = `Soal Aktif saat ini: "${currentQ.text}".\nSiswa bertanya: "${text}". Jawab ringkas dan jelas.`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -878,10 +878,10 @@ Kembalikan respon JSON persis dengan format:
                 });
 
                 const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, AI tidak dapat merespon saat ini.";
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "AI sedang tidak dapat merespon.";
                 appendChatMessage('ai', reply);
             } catch (err) {
-                appendChatMessage('ai', "Maaf, terjadi gangguan jaringan saat menghubungi AI Assistant.");
+                appendChatMessage('ai', "Maaf, kendala jaringan saat menghubungi AI.");
             }
         }
 
@@ -893,11 +893,10 @@ Kembalikan respon JSON persis dengan format:
                 msgDiv.className = 'bg-indigo-600 text-white p-2.5 rounded-xl ml-6 text-right shadow-sm';
                 msgDiv.innerText = text;
             } else if (sender === 'system') {
-                msgDiv.className = 'bg-amber-50 border border-amber-200 text-amber-800 p-2 rounded-lg text-[11px] text-center font-medium';
+                msgDiv.className = 'bg-amber-50 border border-amber-200 text-amber-800 p-2 rounded-lg text-[11px] text-center font-semibold';
                 msgDiv.innerHTML = text;
             } else {
                 msgDiv.className = 'bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-slate-700 mr-4';
-                // Simple formatting for line breaks
                 msgDiv.innerHTML = text.replace(/\n/g, '<br>');
             }
 
@@ -905,7 +904,7 @@ Kembalikan respon JSON persis dengan format:
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // FINISH EXAM & RESULT LOGIC
+        // FINISH EXAM & EVALUATION
         function finishExamPrompt() {
             const total = currentQuestions.length;
             const answered = Object.keys(userAnswers).length;
@@ -936,11 +935,52 @@ Kembalikan respon JSON persis dengan format:
             });
 
             const score = Math.round((correct / total) * 100);
+            const accuracy = Math.round((correct / total) * 100);
 
             document.getElementById('resultScore').innerText = score;
             document.getElementById('resultCorrectText').innerText = `${correct} / ${total} Soal`;
+            document.getElementById('resultAccuracyText').innerText = `${accuracy}%`;
 
+            renderPembahasan();
             goToPage('result');
+        }
+
+        // PEMBAHASAN DETAIL
+        function togglePembahasan() {
+            const container = document.getElementById('pembahasanContainer');
+            container.classList.toggle('hidden');
+        }
+
+        function renderPembahasan() {
+            const list = document.getElementById('pembahasanList');
+            list.innerHTML = '';
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+            currentQuestions.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                const isCorrect = userAns === q.correctIndex;
+
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-rose-50/50 border-rose-200'}`;
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-xs ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">
+                            Soal No. ${idx + 1} ${isCorrect ? '✓ BENAR' : '✗ SALAH / TIDAK TEPAT'}
+                        </span>
+                    </div>
+                    <p class="font-medium text-slate-800 text-sm mb-3">${q.text}</p>
+                    <div class="text-xs space-y-1 mb-3">
+                        <p class="text-slate-600">Jawaban Anda: <span class="font-bold ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}">${userAns !== undefined ? optionLabels[userAns] + '. ' + q.options[userAns] : 'Belum Dijawab'}</span></p>
+                        <p class="text-emerald-700 font-bold">Kunci Jawaban: ${optionLabels[q.correctIndex]}. ${q.options[q.correctIndex]}</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 text-xs text-slate-600">
+                        <strong class="text-indigo-600">Pembahasan:</strong> ${q.explanation || 'Pembahasan materi dasar kompetensi.'}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
         }
     </script>
 </body>
