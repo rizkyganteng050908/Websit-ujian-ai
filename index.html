@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduExam Pro - Sistem Ujian Online Interaktif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                        <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold bg-gradient-to-r from-brand-700 to-indigo-600 bg-clip-text text-transparent">EduExam Pro</h1>
+                        <p class="text-xs text-slate-500 font-medium hidden sm:block">Sistem Ujian Online SMK Interaktif</p>
+                    </div>
+                </div>
+
+                <!-- User Info Header (Dynamic) -->
+                <div id="header-user-info" class="hidden items-center space-x-3 bg-slate-100/80 px-3 py-1.5 rounded-full border border-slate-200/60">
+                    <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-brand-500/30">
+                    <div class="text-left text-xs">
+                        <p id="header-student-name" class="font-semibold text-slate-800 leading-tight">Nama Siswa</p>
+                        <p id="header-student-nisn" class="text-slate-500 font-mono text-[10px]">NISN: -</p>
+                    </div>
+                    <button onclick="logout()" class="ml-2 text-slate-400 hover:text-red-500 transition-colors p-1" title="Keluar">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT SPA CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= PAGE 1: LOGIN ================= -->
+        <section id="page-login" class="fade-in max-w-md mx-auto my-8">
+            <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="text-center mb-8">
+                    <div class="inline-flex p-3 rounded-full bg-brand-50 text-brand-600 mb-3">
+                        <i data-lucide="user-check" class="w-8 h-8"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900">Masuk Portal Ujian</h2>
+                    <p class="text-sm text-slate-500 mt-1">Silakan masuk menggunakan NISN / Email terdaftar</p>
+                </div>
+
+                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">NISN / Email</label>
+                        <div class="relative">
+                            <i data-lucide="id-card" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="login-id" required value="0051234567" placeholder="Contoh: 0051234567" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Kata Sandi</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="password" id="login-password" required value="siswa123" placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <label class="flex items-center text-slate-600 cursor-pointer">
+                            <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-500 mr-2">
+                            Ingat saya
+                        </label>
+                        <a href="#" class="text-brand-600 hover:underline font-medium">Lupa Kata Sandi?</a>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 transition active:scale-[0.99] flex items-center justify-center space-x-2">
+                        <span>Lanjut ke Verifikasi</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center text-xs text-slate-400">
+                    <p>Kendala akun? Hubungi Proktor / Teknisi Sekolah</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 2: VERIFIKASI SISWA ================= -->
+        <section id="page-verification" class="hidden fade-in max-w-2xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-brand-600 to-indigo-600 p-6 text-white">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        <span>Konfirmasi & Verifikasi Data Peserta</span>
+                    </h2>
+                    <p class="text-brand-100 text-xs mt-1">Pastikan seluruh identitas dan Token Ujian sudah sesuai sebelum memulai.</p>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-6">
+                    <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-4 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <div class="relative">
+                            <img id="verify-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250" alt="Foto Siswa" class="w-24 h-24 rounded-2xl object-cover ring-4 ring-white shadow">
+                            <span class="absolute bottom-0 right-0 bg-emerald-500 p-1.5 rounded-full ring-2 ring-white text-white" title="Terverifikasi">
+                                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                            </span>
+                        </div>
+                        <div class="space-y-1 text-center sm:text-left flex-grow">
+                            <div class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 mb-1">Peran: Siswa</div>
+                            <h3 id="verify-name" class="text-lg font-bold text-slate-900">Siti Nurhaliza</h3>
+                            <p class="text-xs text-slate-500 font-mono">NISN: <span id="verify-nisn">0051234567</span></p>
+                            <div class="flex flex-wrap justify-center sm:justify-start gap-2 pt-2 text-xs text-slate-600">
+                                <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-medium">Kelas: XII SMK</span>
+                                <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-medium">Sesi: Sesi 1 (Pagi)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Token Input Form -->
+                    <form id="verify-form" onsubmit="handleTokenVerification(event)" class="space-y-4 border-t border-slate-100 pt-5">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1">Masukkan Token Ujian Hari Ini</label>
+                            <div class="relative">
+                                <i data-lucide="key-round" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="token-input" required uppercase style="text-transform:uppercase" placeholder="Contoh: EXAM2026" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 font-mono text-base tracking-widest uppercase font-bold text-slate-800">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">*Minta kode/token ujian resmi kepada pengawas ruangan Anda.</p>
+                        </div>
+
+                        <div id="token-error" class="hidden p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs flex items-center space-x-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+                            <span id="token-error-text">Token tidak valid! Silakan coba lagi.</span>
+                        </div>
+
+                        <div class="flex space-x-3 pt-2">
+                            <button type="button" onclick="navigateTo('page-login')" class="w-1/3 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition text-sm">
+                                Kembali
+                            </button>
+                            <button type="submit" class="w-2/3 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 transition flex items-center justify-center space-x-2 text-sm">
+                                <span>Verifikasi & Pilih Mapel</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 3: PILIH MATA PELAJARAN ================= -->
+        <section id="page-subjects" class="hidden fade-in max-w-5xl mx-auto">
+            <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">Pilih Mata Pelajaran Keahlian</h2>
+                    <p class="text-sm text-slate-500">Silakan pilih paket soal ujian kompetensi keahlian Anda.</p>
+                </div>
+                <div class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center space-x-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Sistem Siap Ujian</span>
+                </div>
+            </div>
+
+            <!-- Subject Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- RPL Card -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200">Teknologi Informasi</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">RPL</h3>
+                        <p class="text-xs text-slate-500 font-medium">Rekayasa Perangkat Lunak</p>
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-2">Menguji Pemrograman Web, Basis Data, Algoritma, dan Pemrograman Berorientasi Objek.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="text-[11px] text-slate-400">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>60 Menit</p>
+                            <p><i data-lucide="file-text" class="w-3 h-3 inline mr-1"></i>5 Soal Pilihan</p>
+                        </div>
+                        <button onclick="selectSubject('RPL', 'Rekayasa Perangkat Lunak')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-brand-500/20">
+                            Mulai Ujian
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TKJ Card -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-indigo-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="network" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Teknik Komputer</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">TKJ</h3>
+                        <p class="text-xs text-slate-500 font-medium">Teknik Komputer & Jaringan</p>
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-2">Menguji Konfigurasi Routing, Mikrotik, Keamanan Jaringan, dan Troubleshooting LAN/WAN.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="text-[11px] text-slate-400">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>60 Menit</p>
+                            <p><i data-lucide="file-text" class="w-3 h-3 inline mr-1"></i>5 Soal Pilihan</p>
+                        </div>
+                        <button onclick="selectSubject('TKJ', 'Teknik Komputer dan Jaringan')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-brand-500/20">
+                            Mulai Ujian
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Akuntansi Card -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="calculator" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">Bisnis & Keuangan</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">Akuntansi</h3>
+                        <p class="text-xs text-slate-500 font-medium">AKL / Akuntansi Keuangan</p>
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-2">Menguji Jurnal Umum, Laporan Keuangan Neraca, Perpajakan, dan Akuntansi Perusahaan.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="text-[11px] text-slate-400">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>60 Menit</p>
+                            <p><i data-lucide="file-text" class="w-3 h-3 inline mr-1"></i>5 Soal Pilihan</p>
+                        </div>
+                        <button onclick="selectSubject('AKUNTANSI', 'Akuntansi dan Keuangan')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-brand-500/20">
+                            Mulai Ujian
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pemasaran Card -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-amber-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="trending-up" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200">Manajemen Bisnis</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">Pemasaran</h3>
+                        <p class="text-xs text-slate-500 font-medium">Pemasaran Digital & Riset</p>
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-2">Menguji Perencanaan Pemasaran, Digital Marketing, Perilaku Konsumen, & Branding.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="text-[11px] text-slate-400">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>60 Menit</p>
+                            <p><i data-lucide="file-text" class="w-3 h-3 inline mr-1"></i>5 Soal Pilihan</p>
+                        </div>
+                        <button onclick="selectSubject('PEMASARAN', 'Manajemen Pemasaran')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-brand-500/20">
+                            Mulai Ujian
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bisnis Retail (BR) Card -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-purple-500/50 hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200">Perdagangan Modern</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">BR</h3>
+                        <p class="text-xs text-slate-500 font-medium">Bisnis Retail & Toko</p>
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-2">Menguji Operasional Toko Retail, Display Produk (Visual Merchandising), & Kasir.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <div class="text-[11px] text-slate-400">
+                            <p><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i>60 Menit</p>
+                            <p><i data-lucide="file-text" class="w-3 h-3 inline mr-1"></i>5 Soal Pilihan</p>
+                        </div>
+                        <button onclick="selectSubject('BR', 'Bisnis Retail')" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold transition shadow-md shadow-brand-500/20">
+                            Mulai Ujian
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 4: HALAMAN UJIAN / PENGERJAAN SOAL ================= -->
+        <section id="page-exam" class="hidden fade-in max-w-6xl mx-auto">
+            <!-- Top Exam Header Bar -->
+            <div class="bg-white p-4 rounded-2xl shadow-md border border-slate-200 mb-6 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span id="exam-subject-badge" class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-lg text-xs tracking-wider">
+                        RPL
+                    </span>
+                    <h2 id="exam-subject-title" class="text-lg font-bold text-slate-900 inline-block ml-2">Rekayasa Perangkat Lunak</h2>
+                </div>
+
+                <!-- Timer & Status -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2 rounded-xl font-mono text-sm font-bold">
+                        <i data-lucide="clock" class="w-4 h-4 text-amber-600 animate-spin" style="animation-duration: 4s;"></i>
+                        <span>Sisa Waktu: <span id="timer-display">45:00</span></span>
+                    </div>
+                    <div class="text-xs text-slate-500 flex items-center space-x-1 bg-slate-100 px-3 py-2 rounded-xl">
+                        <i data-lucide="save" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        <span id="autosave-status">Autosave Aktif</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Main Content Grid (Questions + Navigation Sidebar) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <!-- Left: Question Area (3 Cols) -->
+                <div class="lg:col-span-3 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col justify-between min-h-[480px]">
+                    <div>
+                        <!-- Question Number & Doubtful Checkbox -->
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                            <span class="text-sm font-bold text-slate-700">Soal No. <span id="current-question-num" class="text-lg text-brand-600">1</span> dari 5</span>
+                            
+                            <!-- Ragu-ragu Checkbox -->
+                            <label class="flex items-center space-x-2 cursor-pointer bg-amber-50 hover:bg-amber-100 text-amber-800 px-3 py-1.5 rounded-lg border border-amber-200 transition text-xs font-semibold select-none">
+                                <input type="checkbox" id="doubt-checkbox" onchange="toggleDoubt()" class="rounded border-amber-400 text-amber-600 focus:ring-amber-500">
+                                <span><i data-lucide="help-circle" class="w-3.5 h-3.5 inline mr-1"></i> Ragu-Ragu</span>
+                            </label>
+                        </div>
+
+                        <!-- Question Text -->
+                        <div id="question-text" class="text-base sm:text-lg text-slate-800 font-medium leading-relaxed mb-6">
+                            Memuat pertanyaan...
+                        </div>
+
+                        <!-- Multiple Choice Options -->
+                        <div id="options-container" class="space-y-3">
+                            <!-- Options dynamically rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Bottom Nav Buttons -->
+                    <div class="flex items-center justify-between pt-8 border-t border-slate-100 mt-8">
+                        <button id="btn-prev" onclick="prevQuestion()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-xs flex items-center space-x-2 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            <span>Sebelumnya</span>
+                        </button>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold text-xs flex items-center space-x-2 transition shadow-md shadow-brand-500/20">
+                            <span>Selanjutnya</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Question Number Grid & Submit (1 Col) -->
+                <div class="lg:col-span-1 space-y-5">
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center justify-between">
+                            <span>Navigasi Soal</span>
+                            <i data-lucide="grid" class="w-4 h-4 text-slate-400"></i>
+                        </h3>
+
+                        <!-- Grid Numbers -->
+                        <div id="question-nav-grid" class="grid grid-cols-5 gap-2.5">
+                            <!-- Dynamically loaded grid buttons -->
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="mt-6 pt-4 border-t border-slate-100 space-y-2 text-[11px] text-slate-600">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-brand-600 border border-brand-700 block"></span>
+                                <span>Sudah Dijawab</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-amber-400 border border-amber-500 block"></span>
+                                <span>Ragu-Ragu</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3.5 h-3.5 rounded bg-slate-100 border border-slate-300 block"></span>
+                                <span>Belum Dijawab</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Finish Exam Button -->
+                    <button onclick="confirmSubmitExam()" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center space-x-2 text-sm">
+                        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                        <span>Selesaikan Ujian</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 5: HASIL & EVALUASI UJIAN ================= -->
+        <section id="page-result" class="hidden fade-in max-w-3xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="bg-slate-900 text-white p-8 text-center relative">
+                    <div class="inline-flex p-4 rounded-full bg-emerald-500/20 text-emerald-400 mb-3 border border-emerald-500/30">
+                        <i data-lucide="trophy" class="w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold">Ujian Selesai!</h2>
+                    <p class="text-slate-400 text-xs mt-1">Hasil evaluasi pengerjaan soal ujian kompetensi Anda.</p>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Score Box -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <p class="text-xs text-slate-500 font-semibold uppercase">Nilai Akhir</p>
+                            <p id="result-score" class="text-4xl font-extrabold text-brand-600 mt-1">80</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                            <p class="text-xs text-emerald-600 font-semibold uppercase">Jawaban Benar</p>
+                            <p id="result-correct" class="text-3xl font-extrabold text-emerald-700 mt-1">4 / 5</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <p class="text-xs text-slate-500 font-semibold uppercase">Status</p>
+                            <p id="result-status" class="text-lg font-bold text-emerald-600 mt-2">LULUS (KKT)</p>
+                        </div>
+                    </div>
+
+                    <!-- AI Review Callout -->
+                    <div class="p-5 bg-gradient-to-r from-indigo-50 to-brand-50 rounded-2xl border border-indigo-100 flex items-start space-x-4">
+                        <div class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-md">
+                            <i data-lucide="sparkles" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Ingin Penjelasan Soal dari Tutor AI?</h4>
+                            <p class="text-xs text-slate-600 mt-1">Gunakan Widget AI Bot di kanan bawah untuk berdiskusi, memahami materi salah, atau bertanya konsep secara mendalam!</p>
+                            <button onclick="triggerAIReview()" class="mt-3 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg transition inline-flex items-center space-x-1.5">
+                                <span>Tanyakan ke AI Bot</span>
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center space-x-3 pt-4">
+                        <button onclick="navigateTo('page-subjects')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl text-xs transition shadow-md shadow-brand-500/20">
+                            Pilih Mata Pelajaran Lain
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400 mt-8">
+        <p>&copy; 2026 EduExam Pro. Hak Cipta Dilindungi Undang-Undang. SMK Bisa Hebat.</p>
+    </footer>
+
+
+    <!-- ================= FLOATING INTEGRATED AI TUTOR BOT ================= -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <!-- AI Toggle Floating Button -->
+        <button id="ai-toggle-btn" onclick="toggleAIChat()" class="flex items-center space-x-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 transition-all duration-300 ring-4 ring-brand-500/20">
+            <i data-lucide="bot" class="w-6 h-6"></i>
+            <span class="font-semibold text-xs pr-1">Tutor AI</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        </button>
+
+        <!-- AI Chat Window Panel -->
+        <div id="ai-chat-panel" class="hidden absolute bottom-16 right-0 w-[90vw] sm:w-[380px] h-[520px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden fade-in">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-slate-900 to-brand-900 text-white p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-brand-500/30 flex items-center justify-center text-brand-300 border border-brand-400/30">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm">EduBot AI Assistant</h3>
+                        <p class="text-[10px] text-slate-300">Asisten & Tutor Pembelajaran SMK</p>
+                    </div>
+                </div>
+                <button onclick="toggleAIChat()" class="text-slate-400 hover:text-white transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Chat Messages Log -->
+            <div id="ai-messages" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-50/50 text-xs">
+                <!-- Welcome Bot Message -->
+                <div class="flex items-start space-x-2">
+                    <div class="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-slate-700 max-w-[85%] leading-relaxed">
+                        Halo! Saya **EduBot**. Ada yang bisa saya bantu terkait persiapan ujian, penjelasan materi, atau petunjuk soal? Silakan tanyakan! 😊
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Suggestions -->
+            <div class="px-3 py-2 bg-slate-100 border-t border-slate-200 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+                <button onclick="sendQuickPrompt('Jelaskan materi RPL secara singkat!')" class="px-2.5 py-1 bg-white hover:bg-brand-50 text-slate-700 hover:text-brand-600 rounded-lg border border-slate-200 whitespace-nowrap transition">
+                    💡 Tips RPL
+                </button>
+                <button onclick="sendQuickPrompt('Apa beda Mikrotik dan Router biasa di TKJ?')" class="px-2.5 py-1 bg-white hover:bg-brand-50 text-slate-700 hover:text-brand-600 rounded-lg border border-slate-200 whitespace-nowrap transition">
+                    🌐 Info TKJ
+                </button>
+                <button onclick="sendQuickPrompt('Bagaimana rumus dasar Laporan Keuangan Akuntansi?')" class="px-2.5 py-1 bg-white hover:bg-brand-50 text-slate-700 hover:text-brand-600 rounded-lg border border-slate-200 whitespace-nowrap transition">
+                    📊 Akuntansi
+                </button>
+            </div>
+
+            <!-- Input Form -->
+            <form id="ai-form" onsubmit="handleAISubmit(event)" class="p-3 bg-white border-t border-slate-200 flex items-center space-x-2">
+                <input type="text" id="ai-input" placeholder="Ketik pertanyaan Anda di sini..." class="flex-grow px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-xs outline-none">
+                <button type="submit" class="p-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl transition shadow-md shadow-brand-500/20">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= APPLICATION JAVASCRIPT ================= -->
+    <script>
+        // GLOBAL STATE APPLICATION
+        const state = {
+            user: {
+                name: "Siti Nurhaliza",
+                nisn: "0051234567",
+                role: "Siswa",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250"
+            },
+            currentSubject: null,
+            subjectTitle: '',
+            currentQuestionIdx: 0,
+            answers: {}, // { 0: 'A', 1: 'B' }
+            doubtful: {}, // { 0: true }
+            questions: [],
+            timerSeconds: 3600, // 60 mins
+            timerInterval: null
+        };
+
+        // BANK SOAL PER JURUSAN
+        const QUESTION_BANK = {
+            RPL: [
+                {
+                    q: "Manakah dari sintaks HTML5 berikut yang digunakan secara tepat untuk mendefinisikan area navigasi utama aplikasi web?",
+                    options: ["<nav>", "<navigation>", "<header>", "<sidebar>"],
+                    answer: 0
+                },
+                {
+                    q: "Dalam pemrograman berorientasi objek (OOP), konsep mendefinisikan metode dengan nama yang sama tetapi memiliki parameter berbeda disebut...",
+                    options: ["Encapsulation", "Method Overloading", "Method Overriding", "Inheritance"],
+                    answer: 1
+                },
+                {
+                    q: "Perintah SQL manakah yang digunakan untuk mengambil data secara terurut menurun (descending) berdasarkan kolom 'nilai'?",
+                    options: ["SELECT * FROM siswa SORT BY nilai DESC", "SELECT * FROM siswa ORDER BY nilai DESC", "SELECT * FROM siswa GROUP BY nilai DESC", "SELECT * FROM siswa ORDER BY nilai DOWN"],
+                    answer: 1
+                },
+                {
+                    q: "Framework JavaScript populer untuk membangun antarmuka pengguna berbasis komponen modular adalah...",
+                    options: ["Laravel", "React / Vue", "Django", "Flask"],
+                    answer: 1
+                },
+                {
+                    q: "Tipe data dalam bahasa C++ / Java yang tepat untuk menyimpan nilai kebenaran (True / False) adalah...",
+                    options: ["String", "Integer", "Boolean", "Float"],
+                    answer: 2
+                }
+            ],
+            TKJ: [
+                {
+                    q: "Protokol jaringan yang bertugas memberikan alamat IP secara otomatis kepada perangkat klien dalam jaringan adalah...",
+                    options: ["DNS", "DHCP", "FTP", "SMTP"],
+                    answer: 1
+                },
+                {
+                    q: "Berapa subnet mask standar untuk Prefix CIDR /24 pada IPv4?",
+                    options: ["255.255.255.0", "255.255.0.0", "255.255.255.128", "255.255.255.240"],
+                    answer: 0
+                },
+                {
+                    q: "Urutan standar susunan kabel UTP tipe Straight T568B untuk pin 1 sampai 3 secara berurutan adalah...",
+                    options: ["Putih-Oranye, Oranye, Putih-Hijau", "Putih-Hijau, Hijau, Putih-Oranye", "Putih-Biru, Biru, Putih-Oranye", "Oranye, Putih-Oranye, Hijau"],
+                    answer: 0
+                },
+                {
+                    q: "Fitur pada Mikrotik yang berfungsi membagi bandwidth internet agar adil bagi tiap pengguna jaringan adalah...",
+                    options: ["Firewall NAT", "Simple Queue / Queue Tree", "Hotspot Server", "IP Binding"],
+                    answer: 1
+                },
+                {
+                    q: "Perangkat jaringan yang bekerja pada Layer 2 (Data Link) OSI Layer dan meneruskan paket data berdasarkan MAC Address adalah...",
+                    options: ["Router", "Switch Layer 2", "Hub", "Repeater"],
+                    answer: 1
+                }
+            ],
+            AKUNTANSI: [
+                {
+                    q: "Persamaan dasar akuntansi yang benar dan baku adalah...",
+                    options: ["Aset = Liabilitas - Ekuitas", "Aset = Liabilitas + Ekuitas", "Ekuitas = Aset + Liabilitas", "Liabilitas = Ekuitas - Aset"],
+                    answer: 1
+                },
+                {
+                    q: "Jurnal untuk mencatat pembelian perlengkapan kantor secara tunai adalah...",
+                    options: ["(D) Perlengkapan, (K) Kas", "(D) Kas, (K) Perlengkapan", "(D) Beban Perlengkapan, (K) Utang", "(D) Utang, (K) Kas"],
+                    answer: 0
+                },
+                {
+                    q: "Laporan keuangan yang menyajikan informasi posisi keuangan (Aset, Kewajiban, dan Modal) pada tanggal tertentu disebut...",
+                    options: ["Laporan Laba Rugi", "Laporan Arus Kas", "Laporan Neraca (Balance Sheet)", "Laporan Perubahan Modal"],
+                    answer: 2
+                },
+                {
+                    q: "Akun berikut yang tergolong ke dalam kelompok Akun Nominal (Temporer) adalah...",
+                    options: ["Kas dan Piutang", "Perlengkapan dan Peralatan", "Beban Gaji dan Pendapatan Usaha", "Utang Usaha dan Modal"],
+                    answer: 2
+                },
+                {
+                    q: "Metode penyusutan aktiva tetap yang menghasilkan beban penyusutan bernilai sama setiap tahunnya adalah...",
+                    options: ["Metode Garis Lurus (Straight Line)", "Metode Saldo Menurun", "Metode Jumlah Angka Tahun", "Metode Satuan Jam Kerja"],
+                    answer: 0
+                }
+            ],
+            PEMASARAN: [
+                {
+                    q: "Bauran pemasaran (Marketing Mix 4P) dalam pemasaran barang tradisional meliputi komponen...",
+                    options: ["Product, Price, Place, Promotion", "People, Process, Product, Price", "Product, Price, Packaging, Positioning", "Plan, Price, Place, Promotion"],
+                    answer: 0
+                },
+                {
+                    q: "Proses membagi pasar yang heterogen menjadi kelompok-kelompok pembeli yang homogen berdasarkan kebutuhan atau karakteristik disebut...",
+                    options: ["Targeting", "Positioning", "Segmentasi Pasar", "Branding"],
+                    answer: 2
+                },
+                {
+                    q: "Strategi pemasaran dengan memanfaatkan platform media sosial, SEO, dan konten online disebut...",
+                    options: ["Telemarketing", "Digital Marketing", "Direct Mail", "Brosur Marketing"],
+                    answer: 1
+                },
+                {
+                    q: "Analisis SWOT yang mengukur faktor internal positif perusahaan adalah...",
+                    options: ["Weaknesses", "Strengths", "Opportunities", "Threats"],
+                    answer: 1
+                },
+                {
+                    q: "Metode penetapan harga murah di awal peluncuran produk untuk menarik perhatian pasar secara cepat disebut...",
+                    options: ["Skimming Price", "Penetration Pricing", "Cost-Plus Pricing", "Premium Pricing"],
+                    answer: 1
+                }
+            ],
+            BR: [
+                {
+                    q: "Penataan dan pemajangan produk di rak toko retail untuk menarik minat beli konsumen dikenal dengan istilah...",
+                    options: ["Visual Merchandising / Display", "Stock Opname", "Sales Promotion", "Cashiering"],
+                    answer: 0
+                },
+                {
+                    q: "Kegiatan penghitungan fisik persediaan barang secara berkala di gudang atau area penjualan toko retail disebut...",
+                    options: ["Receiving", "Stock Opname", "Purchase Order", "Cross Docking"],
+                    answer: 1
+                },
+                {
+                    q: "Tipe tata letak toko retail yang sering diterapkan di minimarket dengan alur rak sejajar adalah...",
+                    options: ["Grid Layout", "Free Flow Layout", "Boutique Layout", "Spine Layout"],
+                    answer: 0
+                },
+                {
+                    q: "Perangkat kasir yang digunakan untuk membaca barcode kode barang secara otomatis adalah...",
+                    options: ["EDC Machine", "Thermal Printer", "Barcode Scanner", "Cash Drawer"],
+                    answer: 2
+                },
+                {
+                    q: "Area pemajangan produk impulsif yang biasanya diletakkan tepat di dekat meja kasir disebut area...",
+                    options: ["POP (Point of Purchase) / Impulsive Display", "Window Display", "Exterior Display", "End Cap Display"],
+                    answer: 0
+                }
+            ]
+        };
+
+        // INITIALIZATION ON PAGE LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateHeaderState();
+        });
+
+        // NAVIGATION SPA HELPER
+        function navigateTo(pageId) {
+            const pages = ['page-login', 'page-verification', 'page-subjects', 'page-exam', 'page-result'];
+            pages.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            updateHeaderState(pageId);
+        }
+
+        function updateHeaderState(activePage) {
+            const headerUser = document.getElementById('header-user-info');
+            if (activePage === 'page-login') {
+                headerUser.classList.add('hidden');
+                headerUser.classList.remove('flex');
+            } else {
+                headerUser.classList.remove('hidden');
+                headerUser.classList.add('flex');
+                document.getElementById('header-student-name').innerText = state.user.name;
+                document.getElementById('header-student-nisn').innerText = `NISN: ${state.user.nisn}`;
+                document.getElementById('header-avatar').src = state.user.avatar;
+            }
+        }
+
+        // LOGIN HANDLER
+        function handleLogin(e) {
+            e.preventDefault();
+            const inputId = document.getElementById('login-id').value;
+            if (inputId) state.user.nisn = inputId;
+            
+            // Sync to Verification Page
+            document.getElementById('verify-nisn').innerText = state.user.nisn;
+            document.getElementById('verify-name').innerText = state.user.name;
+            document.getElementById('verify-avatar').src = state.user.avatar;
+
+            navigateTo('page-verification');
+        }
+
+        // LOGOUT HANDLER
+        function logout() {
+            if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+                clearInterval(state.timerInterval);
+                navigateTo('page-login');
+            }
+        }
+
+        // TOKEN VERIFICATION HANDLER
+        function handleTokenVerification(e) {
+            e.preventDefault();
+            const tokenInput = document.getElementById('token-input').value.trim().toUpperCase();
+            const errorBox = document.getElementById('token-error');
+
+            // Token Validation (Demo Accept any token or EXAM2026)
+            if (tokenInput.length >= 4) {
+                errorBox.classList.add('hidden');
+                navigateTo('page-subjects');
+            } else {
+                errorBox.classList.remove('hidden');
+                document.getElementById('token-error-text').innerText = "Token minimal 4 karakter (Contoh: EXAM2026)";
+            }
+        }
+
+        // SUBJECT SELECTION & START EXAM
+        function selectSubject(subjectKey, title) {
+            state.currentSubject = subjectKey;
+            state.subjectTitle = title;
+            state.questions = QUESTION_BANK[subjectKey] || QUESTION_BANK['RPL'];
+            state.currentQuestionIdx = 0;
+            state.answers = {};
+            state.doubtful = {};
+
+            // Render Header Subject Info
+            document.getElementById('exam-subject-badge').innerText = subjectKey;
+            document.getElementById('exam-subject-title').innerText = title;
+
+            // Start Timer
+            startTimer(60 * 60); // 60 minutes
+            
+            // Render Question & Nav Grid
+            renderQuestion();
+            renderQuestionNav();
+
+            navigateTo('page-exam');
+        }
+
+        // RENDER CURRENT QUESTION
+        function renderQuestion() {
+            const qData = state.questions[state.currentQuestionIdx];
+            document.getElementById('current-question-num').innerText = state.currentQuestionIdx + 1;
+            document.getElementById('question-text').innerText = qData.q;
+
+            // Update Doubtful Checkbox
+            document.getElementById('doubt-checkbox').checked = !!state.doubtful[state.currentQuestionIdx];
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            qData.options.forEach((optText, idx) => {
+                const isSelected = state.answers[state.currentQuestionIdx] === idx;
+                const optBtn = document.createElement('button');
+                optBtn.type = 'button';
+                optBtn.onclick = () => selectOption(idx);
+                optBtn.className = `w-full text-left p-4 rounded-xl border text-sm font-medium transition flex items-center justify-between ${
+                    isSelected 
+                    ? 'bg-brand-50 border-brand-500 text-brand-900 ring-2 ring-brand-500/20 shadow-sm' 
+                    : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
+                }`;
+
+                optBtn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-lg ${isSelected ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-600'} text-xs font-bold flex items-center justify-center flex-shrink-0">
+                            ${optionLabels[idx]}
+                        </span>
+                        <span class="leading-relaxed">${optText}</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border ${isSelected ? 'border-brand-600 bg-brand-600' : 'border-slate-300'} flex items-center justify-center">
+                        ${isSelected ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
+                    </div>
+                `;
+                container.appendChild(optBtn);
+            });
+
+            // Update Prev/Next button states
+            document.getElementById('btn-prev').disabled = state.currentQuestionIdx === 0;
+            const btnNext = document.getElementById('btn-next');
+            if (state.currentQuestionIdx === state.questions.length - 1) {
+                btnNext.innerHTML = `<span>Selesai</span> <i data-lucide="check-circle-2" class="w-4 h-4"></i>`;
+            } else {
+                btnNext.innerHTML = `<span>Selanjutnya</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>`;
+            }
+
+            lucide.createIcons();
+            renderQuestionNav();
+        }
+
+        // OPTION SELECTION & AUTOSAVE
+        function selectOption(optIdx) {
+            state.answers[state.currentQuestionIdx] = optIdx;
+            
+            // Visual Autosave Flash
+            const status = document.getElementById('autosave-status');
+            status.innerText = "Tersimpan...";
+            status.classList.add('text-emerald-600');
+            setTimeout(() => {
+                status.innerText = "Autosave Aktif";
+            }, 800);
+
+            renderQuestion();
+        }
+
+        // TOGGLE DOUBTFUL STATE
+        function toggleDoubt() {
+            const isChecked = document.getElementById('doubt-checkbox').checked;
+            if (isChecked) {
+                state.doubtful[state.currentQuestionIdx] = true;
+            } else {
+                delete state.doubtful[state.currentQuestionIdx];
+            }
+            renderQuestionNav();
+        }
+
+        // NAVIGATE QUESTIONS
+        function prevQuestion() {
+            if (state.currentQuestionIdx > 0) {
+                state.currentQuestionIdx--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (state.currentQuestionIdx < state.questions.length - 1) {
+                state.currentQuestionIdx++;
+                renderQuestion();
+            } else {
+                confirmSubmitExam();
+            }
+        }
+
+        function goToQuestion(idx) {
+            state.currentQuestionIdx = idx;
+            renderQuestion();
+        }
+
+        // QUESTION NAV GRID
+        function renderQuestionNav() {
+            const grid = document.getElementById('question-nav-grid');
+            grid.innerHTML = '';
+
+            state.questions.forEach((_, idx) => {
+                const isAnswered = state.answers[idx] !== undefined;
+                const isDoubt = !!state.doubtful[idx];
+                const isCurrent = state.currentQuestionIdx === idx;
+
+                let bgClass = 'bg-slate-100 border-slate-200 text-slate-700';
+                if (isDoubt) {
+                    bgClass = 'bg-amber-400 border-amber-500 text-amber-950 font-bold';
+                } else if (isAnswered) {
+                    bgClass = 'bg-brand-600 border-brand-700 text-white font-bold';
+                }
+
+                const ringClass = isCurrent ? 'ring-2 ring-offset-1 ring-slate-800 scale-105' : '';
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => goToQuestion(idx);
+                btn.className = `w-9 h-9 rounded-xl border text-xs flex items-center justify-center transition ${bgClass} ${ringClass}`;
+                btn.innerText = idx + 1;
+
+                grid.appendChild(btn);
+            });
+        }
+
+        // TIMER COUNTDOWN
+        function startTimer(seconds) {
+            clearInterval(state.timerInterval);
+            state.timerSeconds = seconds;
+
+            state.timerInterval = setInterval(() => {
+                state.timerSeconds--;
+                if (state.timerSeconds <= 0) {
+                    clearInterval(state.timerInterval);
+                    alert("Waktu ujian telah habis! Jawaban Anda akan otomatis dikirim.");
+                    submitExam();
+                }
+
+                const mins = Math.floor(state.timerSeconds / 60);
+                const secs = state.timerSeconds % 60;
+                document.getElementById('timer-display').innerText = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // SUBMIT EXAM CONFIRMATION & CALCULATION
+        function confirmSubmitExam() {
+            const answeredCount = Object.keys(state.answers).length;
+            const totalQuestions = state.questions.length;
+            const doubtfulCount = Object.keys(state.doubtful).length;
+
+            let msg = `Anda telah menjawab ${answeredCount} dari ${totalQuestions} soal.`;
+            if (doubtfulCount > 0) {
+                msg += `\nMasih ada ${doubtfulCount} soal ditandai Ragu-Ragu!`;
+            }
+            msg += `\nYakin ingin menyelesaikan ujian?`;
+
+            if (confirm(msg)) {
+                submitExam();
+            }
+        }
+
+        function submitExam() {
+            clearInterval(state.timerInterval);
+
+            // Calculate Score
+            let correctCount = 0;
+            state.questions.forEach((q, idx) => {
+                if (state.answers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const score = Math.round((correctCount / state.questions.length) * 100);
+
+            // Render Result Page
+            document.getElementById('result-score').innerText = score;
+            document.getElementById('result-correct').innerText = `${correctCount} / ${state.questions.length}`;
+            
+            const statusEl = document.getElementById('result-status');
+            if (score >= 75) {
+                statusEl.innerText = "LULUS (KKT)";
+                statusEl.className = "text-lg font-bold text-emerald-600 mt-2";
+            } else {
+                statusEl.innerText = "REMIDIAL";
+                statusEl.className = "text-lg font-bold text-red-600 mt-2";
+            }
+
+            navigateTo('page-result');
+        }
+
+
+        // ================= INTEGRATED AI BOT ASSISTANT (GEMINI API) =================
+        function toggleAIChat() {
+            const panel = document.getElementById('ai-chat-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function triggerAIReview() {
+            toggleAIChat();
+            sendQuickPrompt(`Saya baru saja menyelesaikan ujian mata pelajaran ${state.subjectTitle || 'SMK'}. Bisakah kamu memberikan petunjuk ringkas dan semangat belajar?`);
+        }
+
+        function sendQuickPrompt(promptText) {
+            document.getElementById('ai-input').value = promptText;
+            handleAISubmit(new Event('submit'));
+        }
+
+        async function handleAISubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('ai-input');
+            const prompt = inputEl.value.trim();
+            if (!prompt) return;
+
+            // Append User Message
+            appendAIMessage('user', prompt);
+            inputEl.value = '';
+
+            // Loading Indicator Message
+            const loadingId = appendAILoading();
+
+            try {
+                // GEMINI API CALL
+                const systemPrompt = "Anda adalah EduBot, asisten dan tutor AI interaktif untuk siswa SMK di Indonesia. Jawab pertanyaan siswa dengan ramah, komunikatif, motivatif, dan jelas sesuai kompetensi keahlian SMK (RPL, TKJ, Akuntansi, Pemasaran, Bisnis Retail). Gunakan format Markdown ringkas.";
+                const apiKey = ""; // Canvas runtime environment automatically supplies API key when left empty
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                removeAILoading(loadingId);
+
+                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                    const aiReply = data.candidates[0].content.parts[0].text;
+                    appendAIMessage('bot', aiReply);
+                } else {
+                    appendAIMessage('bot', "Maaf, EduBot sedang mengalami gangguan koneksi. Silakan coba lagi sebentar lagi.");
+                }
+
+            } catch (error) {
+                console.error("AI Fetch Error:", error);
+                removeAILoading(loadingId);
+                appendAIMessage('bot', "Maaf, terjadi kendala saat terhubung dengan server AI. Pastikan perangkat Anda terhubung ke internet.");
+            }
+        }
+
+        function appendAIMessage(role, text) {
+            const container = document.getElementById('ai-messages');
+            const msgDiv = document.createElement('div');
+            
+            if (role === 'user') {
+                msgDiv.className = 'flex items-start justify-end space-x-2';
+                msgDiv.innerHTML = `
+                    <div class="bg-brand-600 text-white p-3 rounded-2xl rounded-tr-none shadow-sm max-w-[85%] leading-relaxed">
+                        ${escapeHtml(text)}
+                    </div>
+                `;
+            } else {
+                msgDiv.className = 'flex items-start space-x-2';
+                msgDiv.innerHTML = `
+                    <div class="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-slate-700 max-w-[85%] leading-relaxed">
+                        ${formatMarkdown(text)}
+                    </div>
+                `;
+            }
+
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function appendAILoading() {
+            const container = document.getElementById('ai-messages');
+            const loadingDiv = document.createElement('div');
+            const id = 'loading-' + Date.now();
+            loadingDiv.id = id;
+            loadingDiv.className = 'flex items-start space-x-2';
+            loadingDiv.innerHTML = `
+                <div class="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                </div>
+                <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm text-slate-500 max-w-[85%] flex items-center space-x-2">
+                    <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                    <span class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                    <span class="text-xs ml-1">EduBot sedang mengetik...</span>
+                </div>
+            `;
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        function removeAILoading(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // Helper string sanitization and lightweight markdown
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function formatMarkdown(str) {
+            let formatted = escapeHtml(str);
+            // Bold
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Bullet points
+            formatted = formatted.replace(/^\* (.*$)/gim, '• $1');
+            // Line breaks
+            formatted = formatted.replace(/\n/g, '<br>');
+            return formatted;
+        }
+    </script>
+</body>
+</html>
